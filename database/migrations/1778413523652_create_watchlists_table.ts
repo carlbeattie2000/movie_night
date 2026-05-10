@@ -6,14 +6,14 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table
-        .integer('userId')
+        .integer('user_id')
         .unsigned()
         .references('id')
         .inTable('users')
         .notNullable()
         .onDelete('CASCADE')
       table
-        .integer('movieId')
+        .integer('movie_id')
         .unsigned()
         .references('id')
         .inTable('movies')
