@@ -8,8 +8,10 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export class MovieSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'lastWatched', 'posterUrl', 'title'] as const
+  static $columns = ['category', 'createdAt', 'id', 'lastWatched', 'posterUrl', 'title'] as const
   $columns = MovieSchema.$columns
+  @column()
+  declare category: string
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column({ isPrimary: true })
