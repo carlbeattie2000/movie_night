@@ -12,6 +12,7 @@ export default class extends BaseSchema {
       table.string('title').notNullable()
       table.string('category').notNullable()
       table.string('poster_url').notNullable()
+      table.integer('vote_average').notNullable()
 
       table.timestamp('created_at').notNullable()
     })

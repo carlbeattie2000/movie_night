@@ -30,7 +30,7 @@ export class MovieGenreSchema extends BaseModel {
 }
 
 export class MovieSchema extends BaseModel {
-  static $columns = ['category', 'createdAt', 'id', 'posterUrl', 'title', 'tmdbId'] as const
+  static $columns = ['category', 'createdAt', 'id', 'posterUrl', 'title', 'tmdbId', 'voteAverage'] as const
   $columns = MovieSchema.$columns
   @column()
   declare category: string
@@ -44,6 +44,8 @@ export class MovieSchema extends BaseModel {
   declare title: string
   @column()
   declare tmdbId: number
+  @column()
+  declare voteAverage: number
 }
 
 export class UserSchema extends BaseModel {
