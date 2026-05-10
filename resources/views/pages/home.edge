@@ -11,10 +11,12 @@
             {{ self.name }}'s picks
           </h2>
           <div class="mt-4 mb-4">
-            @form({ route: 'selects.random', method: 'POST' })
-              <button
-                class="mt-2 w-full py-2.5 rounded-lg bg-yellow-400 hover:bg-yellow-300 text-black text-md font-semibold transition-colors duration-150"
-              >Random</button>
+            @if(selfUnwatched.length !== 0)
+              @form({ route: 'selects.random', method: 'POST' })
+                <button
+                  class="mt-2 w-full py-2.5 rounded-lg bg-yellow-400 hover:bg-yellow-300 text-black text-md font-semibold transition-colors duration-150"
+                >Random</button>
+              @end
             @end
             
           </div>
@@ -39,6 +41,16 @@
                       class="mt-2 w-full py-1.5 rounded-lg bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-semibold transition-colors duration-150"
                     >
                       Select
+                    </button>
+                  @end
+                  @form({ route: 'deletes.destroy', method: 'DELETE' })
+                    @field.root({ name: 'movie_id' })
+                      @!input.control({ type: 'hidden', value: movie.id })
+                    @end
+                    <button
+                      class="mt-2 w-full py-1.5 rounded-lg bg-red-400 hover:bg-yellow-300 text-black text-xs font-semibold transition-colors duration-150"
+                    >
+                     Remove 
                     </button>
                   @end
                 </div>

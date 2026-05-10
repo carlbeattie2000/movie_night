@@ -41,6 +41,7 @@ router
     router
       .group(() => {
         router.post('add', [controllers.watchlist.Adds, 'store'])
+        router.delete('delete', [controllers.watchlist.Deletes, 'destroy'])
       })
       .prefix('watchlist')
 
