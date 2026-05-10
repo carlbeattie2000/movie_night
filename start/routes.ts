@@ -15,13 +15,13 @@ router.on('/').render('pages/home').as('home')
 
 router
   .group(() => {
-    router.get('login', [controllers.Session, 'create'])
-    router.post('login', [controllers.Session, 'store'])
+    router.get('login', [controllers.Login, 'create'])
+    router.post('login', [controllers.Login, 'store'])
   })
   .use(middleware.guest())
 
 router
   .group(() => {
-    router.post('logout', [controllers.Session, 'destroy'])
+    router.post('logout', [controllers.Login, 'destroy'])
   })
   .use(middleware.auth())
