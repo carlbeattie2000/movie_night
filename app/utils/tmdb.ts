@@ -2,14 +2,14 @@ import env from '#start/env'
 
 const BASE_URL = 'https://api.themoviedb.org/3'
 
-async function tmdbFetch(path: string) {
+async function tmdbFetch<T>(path: string) {
   const res = await fetch(`${BASE_URL}${path}`, {
     headers: { Authorization: `Bearer ${env.get('TMDB_KEY')}` },
   })
 
   if (!res.ok) throw new Error(`TMDB error: ${res.status}`)
 
-  return res.json()
+  return res.json() as T
 }
 
 export const tmdb = {
