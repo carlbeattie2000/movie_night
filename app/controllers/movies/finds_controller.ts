@@ -6,9 +6,11 @@ export default class FindsController {
     return view.render('pages/movies/find')
   }
 
-  async results({ request }: HttpContext) {
+  async results({ request, view }: HttpContext) {
     const query = request.input('title')
 
-    return tmdb.search(query)
+    const result = await tmdb.search(query)
+
+    return view.render('pages/movies/results', { totalResults: result.total_results })
   }
 }
