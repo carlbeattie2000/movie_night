@@ -1,5 +1,5 @@
 import env from '#start/env'
-import { type MovieSearchResult } from '../contracts/tmdb.ts'
+import { type SingleMovieResult, type MovieSearchResult } from '../contracts/tmdb.ts'
 
 const BASE_URL = 'https://api.themoviedb.org/3'
 
@@ -17,5 +17,5 @@ export const tmdb = {
   search: (query: string) =>
     tmdbFetch<MovieSearchResult>(`/search/movie?query=${encodeURIComponent(query)}&language=en-US`),
   genres: () => tmdbFetch('/genre/movie/list?language=en-US'),
-  movie: (tmdbId: number) => tmdbFetch(`/movie/${tmdbId}?language=en-US`),
+  movie: (tmdbId: number) => tmdbFetch<SingleMovieResult>(`/movie/${tmdbId}?language=en-US`),
 }
