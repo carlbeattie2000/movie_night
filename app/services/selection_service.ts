@@ -23,8 +23,9 @@ class SelectionService {
   }
 
   pick() {
-    const ids = Object.values(this.selections)
-    return ids[Math.floor(Math.random() * ids.length)]
+    const ids = Object.keys(this.selections).map((v) => Number(v))
+    const id = ids[Math.floor(Math.random() * ids.length)]
+    return this.selections[id]
   }
 
   clear() {
