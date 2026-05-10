@@ -11,6 +11,10 @@ export default class FindsController {
 
     const result = await tmdb.search(query)
 
-    return view.render('pages/movies/results', { totalResults: result.total_results })
+    result.results.forEach((r) => {
+      r.poster_path = `https://image.tmdb.org/t/p/w500${r.poster_path}`
+    })
+
+    return view.render('pages/movies/results', { results: result.results })
   }
 }
