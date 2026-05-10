@@ -10,6 +10,14 @@
           <h2 class="text-zinc-900 text-lg font-semibold mb-4">
             {{ self.name }}'s picks
           </h2>
+          <div class="mt-4 mb-4">
+            @form({ route: 'selects.random', method: 'POST' })
+              <button
+                class="mt-2 w-full py-2.5 rounded-lg bg-yellow-400 hover:bg-yellow-300 text-black text-md font-semibold transition-colors duration-150"
+              >Random</button>
+            @end
+            
+          </div>
           <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 gap-3">
             @each(movie in selfUnwatched)
               <div>
@@ -27,7 +35,9 @@
                     @field.root({ name: 'movie_id' })
                       @!input.control({ type: 'hidden', value: movie.id })
                     @end
-                    <button class="mt-2 w-full py-1.5 rounded-lg bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-semibold transition-colors duration-150">
+                    <button
+                      class="mt-2 w-full py-1.5 rounded-lg bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-semibold transition-colors duration-150"
+                    >
                       Select
                     </button>
                   @end
