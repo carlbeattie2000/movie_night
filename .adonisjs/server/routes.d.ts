@@ -8,18 +8,23 @@ export type ScannedRoutes = {
     'login.create': { paramsTuple?: []; params?: {} }
     'login.store': { paramsTuple?: []; params?: {} }
     'login.destroy': { paramsTuple?: []; params?: {} }
+    'finds.create': { paramsTuple?: []; params?: {} }
+    'finds.results': { paramsTuple?: []; params?: {} }
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
     'login.create': { paramsTuple?: []; params?: {} }
+    'finds.create': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
     'login.create': { paramsTuple?: []; params?: {} }
+    'finds.create': { paramsTuple?: []; params?: {} }
   }
   POST: {
     'login.store': { paramsTuple?: []; params?: {} }
     'login.destroy': { paramsTuple?: []; params?: {} }
+    'finds.results': { paramsTuple?: []; params?: {} }
   }
 }
 declare module '@adonisjs/core/types/http' {

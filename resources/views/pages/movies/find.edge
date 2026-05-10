@@ -1,0 +1,23 @@
+@layout() 
+   <div class="form-container">
+    <div>
+      <h1> Movies </h1>
+    </div>
+
+    <div>
+      @form({ route: 'finds.results', method: 'POST' })
+        <div>
+          @field.root({ name: 'title' })
+            @!field.label({ text: 'Title' })
+            @!input.control({ type: 'text' })
+            @!field.error()
+          @end
+        </div>
+
+        <div>
+          @!button({ text: 'Find', type: 'submit' })
+        </div>
+      @end
+    </div>
+  </div> 
+@end
