@@ -5,7 +5,9 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.increments('id').notNullable()
+
+      table.integer('tmdb_id').unsigned().notNullable().index()
 
       table.string('title').notNullable()
       table.string('category').notNullable()
