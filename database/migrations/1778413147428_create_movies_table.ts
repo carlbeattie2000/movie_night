@@ -11,7 +11,6 @@ export default class extends BaseSchema {
       table.string('category').notNullable()
       table.string('poster_url').notNullable()
 
-      table.timestamp('last_watched').nullable()
       table.timestamp('created_at').notNullable()
     })
   }
