@@ -9,7 +9,11 @@ export default defineConfig({
        * Entrypoints of your application. Each entrypoint will
        * result in a separate bundle.
        */
-      entrypoints: ['resources/css/app.css', 'resources/js/*.js'],
+      entrypoints: [
+        'resources/css/app.css',
+        'resources/js/app.js',
+        'resources/js/movie_pick_result.js',
+      ],
 
       /**
        * Paths to watch and reload the browser on file change
