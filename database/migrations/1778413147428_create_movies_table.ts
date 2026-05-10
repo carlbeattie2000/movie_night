@@ -10,7 +10,6 @@ export default class extends BaseSchema {
       table.integer('tmdb_id').unsigned().notNullable().index()
 
       table.string('title').notNullable()
-      table.string('category').notNullable()
       table.string('poster_url').notNullable()
       table.integer('vote_average').notNullable()
 

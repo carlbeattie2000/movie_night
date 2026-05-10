@@ -1,7 +1,6 @@
 @let(titleFromSlot = await $slots.main())
 @let(title = titleFromSlot.trim() ? titleFromSlot : $props.get('text'))
-@let(classes = [])
-
+@let(classes = ['font-semibold text-sm'])
 <h2 {{ $props
   .except(['text'])
   .merge({ class: classes })

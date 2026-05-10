@@ -10,6 +10,7 @@ export type ScannedRoutes = {
     'login.destroy': { paramsTuple?: []; params?: {} }
     'finds.create': { paramsTuple?: []; params?: {} }
     'finds.results': { paramsTuple?: []; params?: {} }
+    'adds.store': { paramsTuple?: []; params?: {} }
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
@@ -25,6 +26,7 @@ export type ScannedRoutes = {
     'login.store': { paramsTuple?: []; params?: {} }
     'login.destroy': { paramsTuple?: []; params?: {} }
     'finds.results': { paramsTuple?: []; params?: {} }
+    'adds.store': { paramsTuple?: []; params?: {} }
   }
 }
 declare module '@adonisjs/core/types/http' {
