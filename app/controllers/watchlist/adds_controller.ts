@@ -14,6 +14,6 @@ export default class AddsController {
 
     session.flash(addMovieResult.status, addMovieResult.message)
 
-    return response.redirect().toRoute('home')
+    return response.redirect().toRoute('home.show')
   }
 }
