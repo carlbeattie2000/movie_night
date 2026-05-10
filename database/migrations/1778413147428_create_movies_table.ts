@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
 
       table.string('title').notNullable()
+      table.string('category').notNullable()
       table.string('poster_url').notNullable()
 
       table.timestamp('last_watched').nullable()
