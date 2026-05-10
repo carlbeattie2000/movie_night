@@ -13,7 +13,7 @@ export const controllers = {
   },
   watchlist: {
     Adds: () => import('#controllers/watchlist/adds_controller'),
-    Home: () => import('#controllers/watchlist/home_controller'),
     Deletes: () => import('#controllers/watchlist/deletes_controller'),
+    Home: () => import('#controllers/watchlist/home_controller'),
   },
 }
