@@ -1,24 +1,19 @@
-import Movie from '#models/movie'
-import WatchlistItem from '#models/watchlist_item'
 import type { HttpContext } from '@adonisjs/core/http'
+import { inject } from '@adonisjs/core'
+import { WatchlistService } from '#services/watchlist_service'
 
+@inject()
 export default class AddsController {
-  async store({ request, auth, response }: HttpContext) {
+  constructor(protected watchlistService: WatchlistService) {}
+
+  async store({ request, auth, response, session }: HttpContext) {
     const user = auth.getUserOrFail()
     const id = request.input('movie_id')
 
-    const localMovieResult = await Movie.query().where('tmdbId', id).first()
+    const addMovieResult = await this.watchlistService.addMovie(id, user.id)
 
-    if (localMovieResult) {
-      const alreadyExist = await WatchlistItem.query()
-        .where('userId', user.id)
-        .andWhere('movieId', localMovieResult.id)
-        .first()
-      if (alreadyExist) {
-        return response.badRequest('Movie already on watch list')
-      }
-      await WatchlistItem.create({ movieId: localMovieResult.id, userId: user.id })
-      return response.ok('movie added')
-    }
+    session.flash(addMovieResult.status, addMovieResult.message)
+
+    return response.redirect().toRoute('home')
   }
 }

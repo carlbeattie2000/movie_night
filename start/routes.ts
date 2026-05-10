@@ -30,5 +30,11 @@ router
         router.post('find', [controllers.movies.Finds, 'results'])
       })
       .prefix('movies')
+
+    router
+      .group(() => {
+        router.post('add', [controllers.watchlist.Adds, 'store'])
+      })
+      .prefix('watchlist')
   })
   .use(middleware.auth())

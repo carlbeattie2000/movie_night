@@ -30,10 +30,8 @@ export class MovieGenreSchema extends BaseModel {
 }
 
 export class MovieSchema extends BaseModel {
-  static $columns = ['category', 'createdAt', 'id', 'posterUrl', 'title', 'tmdbId', 'voteAverage'] as const
+  static $columns = ['createdAt', 'id', 'posterUrl', 'title', 'tmdbId', 'voteAverage'] as const
   $columns = MovieSchema.$columns
-  @column()
-  declare category: string
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column({ isPrimary: true })

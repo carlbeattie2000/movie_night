@@ -1,7 +1,10 @@
 @let(variant = $props.get('variant') || 'default')
 @inject({ variant, autoDismiss: $props.get('autoDismiss') })
-@let(classes = ['alert', `alert-${variant}`])
-
+@let(classes = [
+  'flex items-start gap-3 px-4 py-3 rounded-lg border text-sm',
+  variant === 'success' ? 'bg-green-50 border-green-200 text-green-800' : '',
+  variant === 'error' ? 'bg-red-50 border-red-200 text-red-800' : '',
+])
 <div {{ $props
   .except(['variant', 'autoDismiss'])
   .merge({
@@ -12,4 +15,16 @@
     'x-cloak': true
   })
   .toAttrs()
-}}> {{{ await $slots.main() }}} </div>
+}}>
+  @if(variant === 'success')
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+  @end
+  @if(variant === 'error')
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M12 3a9 9 0 100 18A9 9 0 0012 3z" />
+    </svg>
+  @end
+  <div>{{{ await $slots.main() }}}</div>
+</div>
