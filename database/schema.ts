@@ -8,7 +8,7 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export class MovieSchema extends BaseModel {
-  static $columns = ['category', 'createdAt', 'id', 'lastWatched', 'posterUrl', 'title'] as const
+  static $columns = ['category', 'createdAt', 'id', 'posterUrl', 'title'] as const
   $columns = MovieSchema.$columns
   @column()
   declare category: string
@@ -16,8 +16,6 @@ export class MovieSchema extends BaseModel {
   declare createdAt: DateTime
   @column({ isPrimary: true })
   declare id: number
-  @column.dateTime()
-  declare lastWatched: DateTime | null
   @column()
   declare posterUrl: string
   @column()
@@ -25,18 +23,29 @@ export class MovieSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt'] as const
+  static $columns = ['createdAt', 'id', 'name', 'password'] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
-  @column()
-  declare email: string
-  @column()
-  declare fullName: string | null
   @column({ isPrimary: true })
   declare id: number
+  @column()
+  declare name: string | null
   @column({ serializeAs: null })
   declare password: string
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime | null
+}
+
+export class WatchlistItemSchema extends BaseModel {
+  static $columns = ['createdAt', 'lastWatched', 'movieId', 'userId', 'watched'] as const
+  $columns = WatchlistItemSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare lastWatched: DateTime | null
+  @column()
+  declare movieId: number
+  @column()
+  declare userId: number
+  @column()
+  declare watched: boolean
 }
