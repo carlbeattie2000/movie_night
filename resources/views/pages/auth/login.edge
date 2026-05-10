@@ -1,26 +1,27 @@
 @layout()
-  <div class="form-container">
-    <div>
-      <h1> Login </h1>
-      <p>
-        Enter your email and password below to log in
-      </p>
-    </div>
+  <div class="min-h-screen bg-zinc-100 flex items-center justify-center px-4">
+    <div class="w-full max-w-sm">
 
-    <div>
-      @form({ route: 'login.store', method: 'POST' })
-        <div>
-          @field.root({ name: 'password' })
-            @!field.label({ text: 'Password' })
-            @!input.control({ type: 'password' })
-            @!field.error()
-          @end
-        </div>
+      <div class="text-center mb-8">
+        <h1 class="text-zinc-900 text-3xl font-semibold">Welcome back</h1>
+        <p class="text-zinc-500 text-sm mt-2">Enter your password to continue</p>
+      </div>
 
-        <div>
-          @!button({ text: 'Login', type: 'submit' })
-        </div>
-      @end
+      <div class="bg-white rounded-2xl shadow-sm border border-zinc-200 p-8">
+        @form({ route: 'login.store', method: 'POST' })
+          <div class="mb-5">
+            @field.root({ name: 'password' })
+              @!field.label({ text: 'Password' })
+              @!input.control({ type: 'password', placeholder: '••••••••' })
+              @!field.error()
+            @end
+          </div>
+          <div>
+            @!button({ text: 'Login', type: 'submit', class: 'w-full justify-center' })
+          </div>
+        @end
+      </div>
+
     </div>
   </div>
 @end
