@@ -8,4 +8,8 @@ export const controllers = {
   movies: {
     Finds: () => import('#controllers/movies/finds_controller'),
   },
+  watchlist: {
+    Home: () => import('#controllers/watchlist/home_controller'),
+    Adds: () => import('#controllers/watchlist/adds_controller'),
+  },
 }
