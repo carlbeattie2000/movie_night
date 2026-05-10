@@ -7,6 +7,28 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class GenreSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'name', 'tmdbId'] as const
+  $columns = GenreSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare name: string
+  @column()
+  declare tmdbId: number
+}
+
+export class MovieGenreSchema extends BaseModel {
+  static $columns = ['genreId', 'movieId'] as const
+  $columns = MovieGenreSchema.$columns
+  @column()
+  declare genreId: number
+  @column({ isPrimary: true })
+  declare movieId: number
+}
+
 export class MovieSchema extends BaseModel {
   static $columns = ['category', 'createdAt', 'id', 'posterUrl', 'title'] as const
   $columns = MovieSchema.$columns
