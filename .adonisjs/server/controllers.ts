@@ -5,4 +5,7 @@
 
 export const controllers = {
   Login: () => import('#controllers/login_controller'),
+  movies: {
+    Finds: () => import('#controllers/movies/finds_controller'),
+  },
 }

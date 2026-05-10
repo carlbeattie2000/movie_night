@@ -23,5 +23,12 @@ router
 router
   .group(() => {
     router.post('logout', [controllers.Login, 'destroy'])
+
+    router
+      .group(() => {
+        router.get('find', [controllers.movies.Finds, 'create'])
+        router.post('find', [controllers.movies.Finds, 'results'])
+      })
+      .prefix('movies')
   })
   .use(middleware.auth())
