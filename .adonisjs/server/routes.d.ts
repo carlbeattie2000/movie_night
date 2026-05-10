@@ -16,6 +16,7 @@ export type ScannedRoutes = {
     'gets.fetch': { paramsTuple: [ParamValue]; params: {'movieId': ParamValue} }
     'adds.store': { paramsTuple?: []; params?: {} }
     'selects.store': { paramsTuple?: []; params?: {} }
+    'selects.random': { paramsTuple?: []; params?: {} }
     'results.show': { paramsTuple?: []; params?: {} }
     'results.ready': { paramsTuple?: []; params?: {} }
   }
@@ -43,6 +44,7 @@ export type ScannedRoutes = {
     'finds.results': { paramsTuple?: []; params?: {} }
     'adds.store': { paramsTuple?: []; params?: {} }
     'selects.store': { paramsTuple?: []; params?: {} }
+    'selects.random': { paramsTuple?: []; params?: {} }
     'results.ready': { paramsTuple?: []; params?: {} }
   }
 }

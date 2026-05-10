@@ -47,6 +47,7 @@ router
     router
       .group(() => {
         router.post('/', [controllers.movies.Selects, 'store'])
+        router.post('/random', [controllers.movies.Selects, 'random'])
         router.get('/', [controllers.movies.Results, 'show'])
         router.post('/result/ready', [controllers.movies.Results, 'ready'])
       })

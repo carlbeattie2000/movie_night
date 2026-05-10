@@ -14,4 +14,19 @@ export default class SelectsController {
 
     return response.redirect().toRoute('results.show')
   }
+
+  async random({ auth, response }: HttpContext) {
+    const user = auth.getUserOrFail()
+
+    const watchListMovies = await user.related('watchlist_items').query().where('watched', false)
+
+    const movie = watchListMovies[Math.floor(Math.random() * watchListMovies.length)]
+
+    selectionService.set(user.id, movie.id)
+    transmit.broadcast('selections', {
+      selections: selectionService.get(),
+    })
+
+    return response.redirect().toRoute('results.show')
+  }
 }
