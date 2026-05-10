@@ -8,15 +8,7 @@
     </div>
 
     <div>
-      @form({ route: 'session.store', method: 'POST' })
-        <div>
-          @field.root({ name: 'email' })
-            @!field.label({ text: 'Email' })
-            @!input.control({ type: 'email' })
-            @!field.error()
-          @end
-        </div>
-
+      @form({ route: 'login.store', method: 'POST' })
         <div>
           @field.root({ name: 'password' })
             @!field.label({ text: 'Password' })

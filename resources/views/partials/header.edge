@@ -9,12 +9,11 @@
       <nav>
         @if(auth.user)
           @!avatar({ initials: auth.user.initials })
-          @form({ route: 'session.destroy', method: 'POST' })
+          @form({ route: 'login.destroy', method: 'POST' })
             @!button({ text: 'Logout' })
           @end
         @else
-          @!link({ route: 'new_account.create', text: 'Signup' })
-          @!link({ route: 'session.create', text: 'Login' })
+          @!link({ route: 'login.create', text: 'Login' })
         @end
       </nav>
     </div>
