@@ -7,9 +7,12 @@ export const controllers = {
   Login: () => import('#controllers/login_controller'),
   movies: {
     Finds: () => import('#controllers/movies/finds_controller'),
+    Gets: () => import('#controllers/movies/gets_controller'),
+    Results: () => import('#controllers/movies/results_controller'),
+    Selects: () => import('#controllers/movies/selects_controller'),
   },
   watchlist: {
-    Home: () => import('#controllers/watchlist/home_controller'),
     Adds: () => import('#controllers/watchlist/adds_controller'),
+    Home: () => import('#controllers/watchlist/home_controller'),
   },
 }

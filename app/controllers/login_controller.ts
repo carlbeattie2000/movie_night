@@ -15,7 +15,7 @@ export default class LoginController {
     for (const user of users) {
       if (await hash.verify(user.password, password)) {
         await auth.use('web').login(user)
-        return response.redirect().toRoute('home')
+        return response.redirect().toRoute('home.show')
       }
     }
 

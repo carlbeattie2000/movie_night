@@ -7,9 +7,14 @@
 |
 */
 
+import transmit from '@adonisjs/transmit/services/main'
 import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
+
+transmit.registerRoutes((route) => {
+  route.middleware(middleware.auth())
+})
 
 router
   .group(() => {
@@ -28,6 +33,8 @@ router
       .group(() => {
         router.get('find', [controllers.movies.Finds, 'create'])
         router.post('find', [controllers.movies.Finds, 'results'])
+
+        router.get(':movieId', [controllers.movies.Gets, 'fetch'])
       })
       .prefix('movies')
 
@@ -36,5 +43,13 @@ router
         router.post('add', [controllers.watchlist.Adds, 'store'])
       })
       .prefix('watchlist')
+
+    router
+      .group(() => {
+        router.post('/', [controllers.movies.Selects, 'store'])
+        router.get('/', [controllers.movies.Results, 'show'])
+        router.post('/result/ready', [controllers.movies.Results, 'ready'])
+      })
+      .prefix('select')
   })
   .use(middleware.auth())
