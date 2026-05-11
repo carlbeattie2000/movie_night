@@ -34,6 +34,8 @@ router
         router.get('find', [controllers.movies.Finds, 'create'])
         router.post('find', [controllers.movies.Finds, 'results'])
 
+        router.get('browse', [controllers.movies.Browses, 'view'])
+
         router.get(':movieId', [controllers.movies.Gets, 'fetch'])
       })
       .prefix('movies')

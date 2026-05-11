@@ -1,0 +1,15 @@
+@layout()
+  <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 w-full gap-2 p-6">
+    @each(movie in movies)
+        <div class="flex flex-col shadow-2xl rounded-b">
+            <div class="h-full">
+                <img src={{ movie.poster_path }} class="rounded-t h-full" />
+            </div>
+            <div class="p-3">
+                <p class="font-bold">{{ movie.title }}</p>
+                <p class="font-light">{{ movie.release_date }}</p>
+            </div>
+        </div>
+    @end
+  </div>
+@end
