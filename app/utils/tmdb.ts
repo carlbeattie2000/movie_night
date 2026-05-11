@@ -33,6 +33,6 @@ export const tmdb = {
   movie: (tmdbId: number) => tmdbFetch<SingleMovieResult>(`/movie/${tmdbId}?language=en-US`),
   movies: (genreId: number, page: number) =>
     tmdbFetch<MovieSearchResult>(
-      `/discover/movie?with_genres=${genreId}&include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc`
+      `/discover/movie?with_genres=${genreId}&include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&vote_count.gte=200`
     ),
 }
