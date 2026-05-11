@@ -29,6 +29,19 @@ export class MovieGenreSchema extends BaseModel {
   declare movieId: number
 }
 
+export class MoviePickedResultSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'movieId', 'updatedAt'] as const
+  $columns = MoviePickedResultSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare movieId: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class MovieSchema extends BaseModel {
   static $columns = ['createdAt', 'id', 'posterUrl', 'title', 'tmdbId', 'voteAverage'] as const
   $columns = MovieSchema.$columns

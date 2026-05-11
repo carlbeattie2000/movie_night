@@ -53,3 +53,14 @@ export interface GenresResult {
     name: string
   }[]
 }
+
+export interface Providers {
+  results?: {
+    GB?: {
+      flatrate?: {
+        logo_path: string
+        provider_name: string
+      }[]
+    }
+  }
+}

@@ -11,16 +11,7 @@ async function init() {
 
   subscription.onMessage((data) => {
     if (!data.winner) return
-    fetch(`/movies/${data.winner}`)
-      .then((r) => r.json())
-      .then((movie) => {
-        document.getElementById('waiting').classList.add('hidden')
-        document.getElementById('winner-poster').src = movie.posterUrl
-        document.getElementById('winner-title').textContent = movie.title
-        document.getElementById('winner-rating').textContent = `★ ${movie.voteAverage.toFixed(1)}`
-        document.getElementById('winner').classList.remove('hidden')
-      })
-      .catch((err) => console.error('Failed to fetch movie:', err))
+    window.location.href = 'movies/picked'
   })
 
   await fetch('/select/result/ready', {
