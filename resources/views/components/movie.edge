@@ -1,4 +1,4 @@
-<div class="flex flex-col shadow-2xl rounded-b bg-white" id="movie_{{id}}">
+<div class="flex flex-col shadow-2xl rounded-b bg-white" id="movie_{{ id }}">
   <div class="aspect-2/3 overflow-hidden">
     <img src="{{ poster_path }}" alt="{{ title }}" class="rounded-t w-full h-full object-cover" />
   </div>
@@ -14,6 +14,11 @@
     @if(vote_average)
       <p class="text-zinc-500 text-xs mt-0.5">
         ★ {{ vote_average }}
+      </p>
+    @end
+    @if(last_watched >= 0)
+      <p class="text-zinc-500 text-xs mt-0.5">
+        Last watched: {{ last_watched === 0 ? 'Today' : `${last_watched} days ago` }}
       </p>
     @end
     @if (select_button && id)
@@ -94,7 +99,7 @@
         btn.textContent = "✓ Removed";
         btn.classList.remove("bg-red-400", "hover:bg-red-300");
         btn.classList.add("bg-green-400");
-        document.getElementById(`movie_${movieId}`).remove()
+        document.getElementById(`movie_${movieId}`).remove();
       } else {
         btn.textContent = data.message || "Failed";
         btn.classList.remove("bg-red-400", "hover:bg-red-300");

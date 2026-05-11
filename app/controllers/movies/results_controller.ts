@@ -19,7 +19,7 @@ export default class ResultsController {
       await WatchlistItem.query()
         .whereIn('userId', [1, 2])
         .where('movieId', winnerId)
-        .update({ watched: true, lastWatched: DateTime.now().toISO() })
+        .update({ watched: true, lastWatched: DateTime.now().toSQL() })
 
       transmit.broadcast('result', { winner: winnerId })
       selectionService.clear()
