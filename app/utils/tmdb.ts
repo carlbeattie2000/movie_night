@@ -31,8 +31,8 @@ export const tmdb = {
     tmdbFetch<MovieSearchResult>(`/search/movie?query=${encodeURIComponent(query)}&language=en-US`),
   genres: () => tmdbFetch<GenresResult>('/genre/movie/list?language=en-US'),
   movie: (tmdbId: number) => tmdbFetch<SingleMovieResult>(`/movie/${tmdbId}?language=en-US`),
-  movies: () =>
+  movies: (genreId: number, page: number) =>
     tmdbFetch<MovieSearchResult>(
-      '/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc'
+      `/discover/movie?with_genres=${genreId}&include_adult=true&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc`
     ),
 }

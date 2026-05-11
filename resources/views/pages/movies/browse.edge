@@ -1,15 +1,70 @@
 @layout()
-  <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 w-full gap-2 p-6">
-    @each(movie in movies)
-        <div class="flex flex-col shadow-2xl rounded-b">
-            <div class="h-full">
-                <img src={{ movie.poster_path }} class="rounded-t h-full" />
-            </div>
-            <div class="p-3">
-                <p class="font-bold">{{ movie.title }}</p>
-                <p class="font-light">{{ movie.release_date }}</p>
-            </div>
+  <div class="bg-zinc-50">
+    <div class="grid grid-cols-2 gap-x-2 gap-y-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 w-full p-6">
+      @each(movie in movies)
+        <div class="flex flex-col shadow-2xl rounded-b bg-white">
+          <div class="aspect-[2/3] overflow-hidden">
+            <img
+              src="{{ movie.poster_path }}"
+              alt="{{ movie.title }}"
+              class="rounded-t w-full h-full object-cover"
+            />
+          </div>
+          <div class="p-3">
+            <p class="text-zinc-900 text-md font-semibold leading-tight line-clamp-1">
+              {{ movie.title }}
+            </p>
+            <p class="text-zinc-500 text-xs mt-0.5">
+              {{ movie.release_date }}
+            </p>
+          </div>
         </div>
+      @end
+    </div>
+    @if(totalPages !== currentPage || currentPage > 1)
+      <div class="flex items-center justify-center gap-3 mt-8 mb-8">
+        @if(currentPage > 1)
+          @link({ route: 'browses.view', routeOptions: { qs: { genreId, page: currentPage - 1 } } })
+            <span
+              class="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-zinc-200 text-zinc-600 text-sm font-semibold hover:border-zinc-400 hover:text-zinc-900 transition-colors duration-150"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+              Previous
+        </span>
+          @end
+        @end
+        
+        <span class="text-zinc-400 text-sm">{{ currentPage }} / {{ totalPages }}</span>
+
+        @if(totalPages !== currentPage)
+          @link({ route: 'browses.view', routeOptions: { qs: { genreId, page: currentPage + 1 } } })
+            <span
+              class="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-zinc-200 text-zinc-600 text-sm font-semibold hover:border-zinc-400 hover:text-zinc-900 transition-colors duration-150"
+            >
+              Next
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </span>
+          @end
+        @end
+      </div>
     @end
   </div>
 @end
