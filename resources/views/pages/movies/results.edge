@@ -1,31 +1,14 @@
 @layout()
-  <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 p-4">
+  <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 p-4">
     @each(movie in results)
-      <div>
-        <div class="rounded-xl overflow-hidden aspect-[2/3] bg-zinc-100">
-          @if(movie.poster_path)
-            <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" class="w-full h-full object-cover" />
-          @else
-            <div class="w-full h-full flex items-center justify-center text-zinc-400">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
-              </svg>
-            </div>
-          @end
-        </div>
-        <div class="mt-2">
-          <p class="text-zinc-900 text-xs font-semibold leading-tight line-clamp-1">{{ movie.title }}</p>
-          <p class="text-zinc-500 text-xs mt-0.5">★ {{ movie.vote_average.toFixed(1) }}</p>
-          @form({ route: 'watchlists.store', method: 'POST' })
-            @field.root({ name: 'movie_id' })
-              @!input.control({ type: 'hidden', value: movie.id })
-            @end
-            <button class="mt-1.5 w-full py-1.5 rounded-lg bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-semibold transition-colors duration-150">
-              Add
-            </button>
-          @end
-        </div>
-      </div>
+      @!component('components/movie', {
+                  title: movie.title,
+                  release_date: movie.release_date,
+                  poster_path: movie.poster_path,
+                  vote_average: movie.vote_average.toFixed(1),
+                  id: movie.id,
+                  add_button: true
+      })
     @end
   </div>
 @end
