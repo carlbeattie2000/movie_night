@@ -51,4 +51,8 @@ export class WatchlistService {
 
     return { status: 'success', message: 'Movie added' }
   }
+
+  async removeMovie(userId: number, movieId: number) {
+    await WatchlistItem.query().where('userId', userId).andWhere('movieId', movieId).delete()
+  }
 }

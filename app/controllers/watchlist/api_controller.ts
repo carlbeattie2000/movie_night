@@ -3,21 +3,10 @@ import { inject } from '@adonisjs/core'
 import { WatchlistService } from '#services/watchlist_service'
 
 @inject()
-export default class AddsController {
+export default class ApiController {
   constructor(protected watchlistService: WatchlistService) {}
 
-  async store({ request, auth, response, session }: HttpContext) {
-    const user = auth.getUserOrFail()
-    const id = request.input('movie_id')
-
-    const addMovieResult = await this.watchlistService.addMovie(id, user.id)
-
-    session.flash(addMovieResult.status, addMovieResult.message)
-
-    return response.redirect().toRoute('home.show')
-  }
-
-  async storeAPI({ request, auth, response }: HttpContext) {
+  async store({ request, auth, response }: HttpContext) {
     const user = auth.getUserOrFail()
     const id = request.input('movie_id')
 
@@ -28,5 +17,14 @@ export default class AddsController {
     }
 
     return response.ok(result)
+  }
+
+  async destroy({ request, auth, response }: HttpContext) {
+    const user = auth.getUserOrFail()
+    const movieId = request.input('movie_id')
+
+    this.watchlistService.removeMovie(user.id, movieId)
+
+    return response.noContent()
   }
 }

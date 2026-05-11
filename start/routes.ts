@@ -31,9 +31,11 @@ router
 
     router
       .group(() => {
-        router.post('/watchlist/add', [controllers.watchlist.Adds, 'storeAPI'])
+        router.post('/watchlist/add', [controllers.watchlist.Api, 'store'])
+        router.delete('/watchlist/remove', [controllers.watchlist.Api, 'destroy'])
       })
       .prefix('api')
+      .as('watchlist')
 
     router
       .group(() => {
@@ -48,8 +50,8 @@ router
 
     router
       .group(() => {
-        router.post('add', [controllers.watchlist.Adds, 'store'])
-        router.delete('delete', [controllers.watchlist.Deletes, 'destroy'])
+        router.post('add', [controllers.watchlist.Watchlists, 'store'])
+        router.delete('delete', [controllers.watchlist.Watchlists, 'destroy'])
       })
       .prefix('watchlist')
 

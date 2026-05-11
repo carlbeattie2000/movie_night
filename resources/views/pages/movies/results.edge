@@ -16,7 +16,7 @@
         <div class="mt-2">
           <p class="text-zinc-900 text-xs font-semibold leading-tight line-clamp-1">{{ movie.title }}</p>
           <p class="text-zinc-500 text-xs mt-0.5">★ {{ movie.vote_average.toFixed(1) }}</p>
-          @form({ route: 'adds.store', method: 'POST' })
+          @form({ route: 'watchlists.store', method: 'POST' })
             @field.root({ name: 'movie_id' })
               @!input.control({ type: 'hidden', value: movie.id })
             @end
