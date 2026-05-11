@@ -6,7 +6,11 @@ export default class extends BaseSeeder {
   async run() {
     const genresResult = await tmdb.genres()
 
-    genresResult.genres.forEach(async (genre) => {
+    if (genresResult.status === 'invalid_json') {
+      throw new Error(genresResult.message)
+    }
+
+    genresResult.result.genres.forEach(async (genre) => {
       await Genre.create({
         tmdbId: genre.id,
         name: genre.name,
