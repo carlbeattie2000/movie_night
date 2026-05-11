@@ -10,13 +10,19 @@
         <img src="{{ movie.posterUrl }}" alt="{{ movie.title }}" class="w-full h-full object-cover" />
       </div>
 
-      <h2 class="text-zinc-900 text-xl font-semibold mb-1">{{ movie.title }}</h2>
-      <p class="text-zinc-500 text-sm">★ {{ movie.voteAverage.toFixed(1) }}</p>
+      <h2 class="text-zinc-900 text-xl font-semibold mb-1">
+        {{ movie.title }}
+      </h2>
+      <p class="text-zinc-500 text-sm">
+        ★ {{ movie.voteAverage.toFixed(1) }}
+      </p>
 
       @if(providers && providers.length)
         <div class="mt-6">
-          <p class="text-zinc-400 text-xs uppercase tracking-wide font-medium mb-3">Available on</p>
-          <div class="flex items-center justify-center gap-3 flex-wrap">
+          <p class="text-zinc-400 text-xs uppercase tracking-wide font-medium mb-3">
+            Available on
+          </p>
+          <div class="grid grid-cols sm:grid-cols-2 sm:justify-center gap-3">
             @each(provider in providers)
               <div class="flex flex-col items-center gap-1.5">
                 <img
@@ -31,19 +37,27 @@
         </div>
       @else
         <div class="mt-6">
-          <p class="text-zinc-400 text-xs uppercase tracking-wide font-medium mb-1">Streaming</p>
-          <p class="text-zinc-500 text-sm">Not available on any streaming services</p>
+          <p class="text-zinc-400 text-xs uppercase tracking-wide font-medium mb-1">
+            Streaming
+          </p>
+          <p class="text-zinc-500 text-sm">
+            Not available on any streaming services
+          </p>
         </div>
       @end
-
+      
       <div class="mt-8 flex flex-col gap-3">
         @form({ route: 'results.cancel', method: 'POST' })
-          <button class="w-full px-6 py-2.5 rounded-lg border border-red-200 text-red-400 text-sm font-semibold hover:border-red-300 hover:text-red-500 transition-colors duration-150">
+          <button
+            class="w-full px-6 py-2.5 rounded-lg border border-red-200 text-red-400 text-sm font-semibold hover:border-red-300 hover:text-red-500 transition-colors duration-150"
+          >
             Not feeling it
           </button>
         @end
         @form({ route: 'home.show', method: 'GET' })
-          <button class="w-full px-6 py-2.5 rounded-lg border border-zinc-200 text-zinc-600 text-sm font-semibold hover:border-zinc-400 hover:text-zinc-900 transition-colors duration-150">
+          <button
+            class="w-full px-6 py-2.5 rounded-lg border border-zinc-200 text-zinc-600 text-sm font-semibold hover:border-zinc-400 hover:text-zinc-900 transition-colors duration-150"
+          >
             Back to list
           </button>
         @end
