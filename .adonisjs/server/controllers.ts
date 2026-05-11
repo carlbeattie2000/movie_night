@@ -13,8 +13,8 @@ export const controllers = {
     Selects: () => import('#controllers/movies/selects_controller'),
   },
   watchlist: {
+    Api: () => import('#controllers/watchlist/api_controller'),
     Home: () => import('#controllers/watchlist/home_controller'),
     Watchlists: () => import('#controllers/watchlist/watchlists_controller'),
-    Api: () => import('#controllers/watchlist/api_controller'),
   },
 }
