@@ -6,15 +6,20 @@ export default class FindsController {
     return view.render('pages/movies/find')
   }
 
-  async results({ request, view }: HttpContext) {
+  async results({ request, view, response, session }: HttpContext) {
     const query = request.input('title')
 
-    const result = await tmdb.search(query)
+    const searchResult = await tmdb.search(query)
 
-    result.results.forEach((r) => {
+    if (searchResult.status === 'invalid_json') {
+      session.flash('error', searchResult.message)
+      return response.redirect().toRoute('home.show')
+    }
+
+    searchResult.result.results.forEach((r) => {
       r.poster_path = `https://image.tmdb.org/t/p/w500${r.poster_path}`
     })
 
-    return view.render('pages/movies/results', { results: result.results })
+    return view.render('pages/movies/results', { results: searchResult.result.results })
   }
 }

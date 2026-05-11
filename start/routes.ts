@@ -31,6 +31,12 @@ router
 
     router
       .group(() => {
+        router.post('/watchlist/add', [controllers.watchlist.Adds, 'storeAPI'])
+      })
+      .prefix('api')
+
+    router
+      .group(() => {
         router.get('find', [controllers.movies.Finds, 'create'])
         router.post('find', [controllers.movies.Finds, 'results'])
 

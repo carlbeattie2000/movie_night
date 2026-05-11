@@ -27,14 +27,20 @@ export class WatchlistService {
 
     const tmdbMovieResult = await tmdb.movie(tmdbMovieId)
 
+    if (tmdbMovieResult.status === 'invalid_json') {
+      return { status: 'error', message: tmdbMovieResult.message }
+    }
+
+    const tmdbMovie = tmdbMovieResult.result
+
     const movie = await Movie.create({
-      tmdbId: tmdbMovieResult.id,
-      title: tmdbMovieResult.title,
-      posterUrl: `https://image.tmdb.org/t/p/w500${tmdbMovieResult.poster_path}`,
-      voteAverage: tmdbMovieResult.vote_average,
+      tmdbId: tmdbMovie.id,
+      title: tmdbMovie.title,
+      posterUrl: `https://image.tmdb.org/t/p/w500${tmdbMovie.poster_path}`,
+      voteAverage: tmdbMovie.vote_average,
     })
 
-    const genreIdMap = tmdbMovieResult.genres.map((g) => g.id)
+    const genreIdMap = tmdbMovie.genres.map((g) => g.id)
     const genres = await Genre.query().whereIn('tmdbId', genreIdMap)
 
     for (const genre of genres) {

@@ -16,4 +16,17 @@ export default class AddsController {
 
     return response.redirect().toRoute('home.show')
   }
+
+  async storeAPI({ request, auth, response }: HttpContext) {
+    const user = auth.getUserOrFail()
+    const id = request.input('movie_id')
+
+    const result = await this.watchlistService.addMovie(id, user.id)
+
+    if (result.status === 'error') {
+      return response.badRequest(result)
+    }
+
+    return response.ok(result)
+  }
 }
