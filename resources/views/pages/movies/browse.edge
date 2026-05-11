@@ -17,6 +17,12 @@
             <p class="text-zinc-500 text-xs mt-0.5">
               {{ movie.release_date }}
             </p>
+            <button
+              onclick="addMovie({{ movie.id }}, this)"
+              class="mt-2 w-full py-1.5 rounded-lg bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-semibold transition-colors duration-150"
+            >
+              Add
+            </button>
           </div>
         </div>
       @end
@@ -68,3 +74,39 @@
     @end
   </div>
 @end
+<script>
+  async function addMovie(movieId, btn) {
+    btn.disabled = true;
+    btn.textContent = "Adding…";
+    try {
+      const res = await fetch("/api/watchlist/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          movie_id: movieId
+        })
+      });
+      const data = await res.json();
+      if (data.status === "success") {
+        btn.textContent = "✓ Added";
+        btn.classList.remove("bg-yellow-400", "hover:bg-yellow-300");
+        btn.classList.add("bg-green-400");
+      } else {
+        btn.textContent = data.message || "Failed";
+        btn.classList.remove("bg-yellow-400", "hover:bg-yellow-300");
+        btn.classList.add("bg-red-400");
+        setTimeout(() => {
+          btn.textContent = "+ Add";
+          btn.classList.add("bg-yellow-400", "hover:bg-yellow-300");
+          btn.classList.remove("bg-red-400");
+          btn.disabled = false;
+        }, 2e3);
+      }
+    } catch {
+      btn.textContent = "Failed";
+      btn.disabled = false;
+    }
+  }
+</script>

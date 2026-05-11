@@ -11,6 +11,7 @@ export type ScannedRoutes = {
     'login.store': { paramsTuple?: []; params?: {} }
     'login.destroy': { paramsTuple?: []; params?: {} }
     'home.show': { paramsTuple?: []; params?: {} }
+    'adds.store_api': { paramsTuple?: []; params?: {} }
     'finds.create': { paramsTuple?: []; params?: {} }
     'finds.results': { paramsTuple?: []; params?: {} }
     'browses.view': { paramsTuple?: []; params?: {} }
@@ -45,6 +46,7 @@ export type ScannedRoutes = {
     'unsubscribe': { paramsTuple?: []; params?: {} }
     'login.store': { paramsTuple?: []; params?: {} }
     'login.destroy': { paramsTuple?: []; params?: {} }
+    'adds.store_api': { paramsTuple?: []; params?: {} }
     'finds.results': { paramsTuple?: []; params?: {} }
     'adds.store': { paramsTuple?: []; params?: {} }
     'selects.store': { paramsTuple?: []; params?: {} }
