@@ -17,6 +17,7 @@ export type ScannedRoutes = {
     'finds.results': { paramsTuple?: []; params?: {} }
     'browses.view': { paramsTuple?: []; params?: {} }
     'results.view': { paramsTuple?: []; params?: {} }
+    'results.cancel': { paramsTuple?: []; params?: {} }
     'gets.fetch': { paramsTuple: [ParamValue]; params: {'movieId': ParamValue} }
     'watchlists.store': { paramsTuple?: []; params?: {} }
     'watchlists.destroy': { paramsTuple?: []; params?: {} }
@@ -52,6 +53,7 @@ export type ScannedRoutes = {
     'login.destroy': { paramsTuple?: []; params?: {} }
     'watchlist.api.store': { paramsTuple?: []; params?: {} }
     'finds.results': { paramsTuple?: []; params?: {} }
+    'results.cancel': { paramsTuple?: []; params?: {} }
     'watchlists.store': { paramsTuple?: []; params?: {} }
     'selects.store': { paramsTuple?: []; params?: {} }
     'selects.random': { paramsTuple?: []; params?: {} }
