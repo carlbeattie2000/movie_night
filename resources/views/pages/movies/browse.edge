@@ -2,29 +2,13 @@
   <div class="bg-zinc-50">
     <div class="grid grid-cols-2 gap-x-2 gap-y-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 w-full p-6">
       @each(movie in movies)
-        <div class="flex flex-col shadow-2xl rounded-b bg-white">
-          <div class="aspect-[2/3] overflow-hidden">
-            <img
-              src="{{ movie.poster_path }}"
-              alt="{{ movie.title }}"
-              class="rounded-t w-full h-full object-cover"
-            />
-          </div>
-          <div class="p-3">
-            <p class="text-zinc-900 text-md font-semibold leading-tight line-clamp-1">
-              {{ movie.title }}
-            </p>
-            <p class="text-zinc-500 text-xs mt-0.5">
-              {{ movie.release_date }}
-            </p>
-            <button
-              onclick="addMovie({{ movie.id }}, this)"
-              class="mt-2 w-full py-1.5 rounded-lg bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-semibold transition-colors duration-150"
-            >
-              Add
-            </button>
-          </div>
-        </div>
+         @!component('components/movie', {  
+            title: movie.title,
+            release_date: movie.release_date,
+            poster_path: movie.poster_path,
+            id: movie.id,
+            add_button: true,
+         })
       @end
     </div>
     @if(totalPages !== currentPage || currentPage > 1)

@@ -1,5 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { tmdb } from '../../utils/tmdb.ts'
+import { DateTime } from 'luxon'
 
 export default class FindsController {
   async create({ view }: HttpContext) {
@@ -18,6 +19,7 @@ export default class FindsController {
 
     searchResult.result.results.forEach((r) => {
       r.poster_path = `https://image.tmdb.org/t/p/w500${r.poster_path}`
+      r.release_date = DateTime.fromISO(r.release_date).toFormat('d LLLL yyyy')
     })
 
     return view.render('pages/movies/results', { results: searchResult.result.results })

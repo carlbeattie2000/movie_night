@@ -56,41 +56,17 @@
                   @end
                 @end
               </div>
-              <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 gap-3">
+              <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-3 gap-3">
                 @each(movie in selfUnwatched)
-                  <div>
-                    <div class="rounded-xl overflow-hidden aspect-[2/3] bg-zinc-100">
-                      <img src="{{ movie.posterUrl }}" alt="{{ movie.title }}" class="w-full h-full object-cover" />
-                    </div>
-                    <div class="mt-2">
-                      <p class="text-zinc-900 text-xs font-semibold leading-tight line-clamp-1">
-                        {{ movie.title }}
-                      </p>
-                      <p class="text-zinc-500 text-xs mt-0.5">
-                        ★ {{ movie.voteAverage.toFixed(1) }}
-                      </p>
-                      @form({ route: 'selects.store', method: 'POST' })
-                        @field.root({ name: 'movie_id' })
-                          @!input.control({ type: 'hidden', value: movie.id })
-                        @end
-                        <button
-                          class="mt-2 w-full py-1.5 rounded-lg bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-semibold transition-colors duration-150"
-                        >
-                          Select
-                        </button>
-                      @end
-                      @form({ route: 'watchlists.destroy', method: 'DELETE' })
-                        @field.root({ name: 'movie_id' })
-                          @!input.control({ type: 'hidden', value: movie.id })
-                        @end
-                        <button
-                          class="mt-1 w-full py-1.5 rounded-lg bg-red-400 hover:bg-red-300 text-black text-xs font-semibold transition-colors duration-150"
-                        >
-                          Remove
-                        </button>
-                      @end
-                    </div>
-                  </div>
+                  @!component('components/movie', {
+                  title: movie.title,
+                  release_date: movie.release_date,
+                  poster_path: movie.posterUrl,
+                  vote_average: movie.voteAverage.toFixed(1),
+                  id: movie.id,
+                  select_button: true,
+                  remove_button: true
+                  })
                 @end
               </div>
             </div>
@@ -100,29 +76,24 @@
               <h2 class="text-zinc-900 text-lg font-semibold mb-4">
                 {{ other.name }}'s picks
               </h2>
-              <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 gap-3">
+              <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-3 gap-3">
                 @each(movie in otherUnwatched)
-                  <div>
-                    <div class="rounded-xl overflow-hidden aspect-[2/3] bg-zinc-100">
-                      <img src="{{ movie.posterUrl }}" alt="{{ movie.title }}" class="w-full h-full object-cover" />
-                    </div>
-                    <div class="mt-2">
-                      <p class="text-zinc-900 text-xs font-semibold leading-tight line-clamp-1">
-                        {{ movie.title }}
-                      </p>
-                      <p class="text-zinc-500 text-xs mt-0.5">
-                        ★ {{ movie.voteAverage.toFixed(1) }}
-                      </p>
-                    </div>
-                  </div>
+                  @!component('components/movie', {
+                  title: movie.title,
+                  release_date: movie.release_date,
+                  poster_path: movie.posterUrl,
+                  vote_average: movie.voteAverage.toFixed(1),
+                  id: movie.id,
+                  })
                 @end
-              </div>
+              @end
             </div>
-
           </div>
-        </div>
 
+        </div>
       </div>
+
     </div>
   </div>
+</div>
 @end
