@@ -11,7 +11,6 @@ import transmit from '@adonisjs/transmit/services/main'
 import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
-import { tmdb } from '../app/utils/tmdb.ts'
 
 transmit.registerRoutes((route) => {
   route.middleware(middleware.auth())
@@ -46,6 +45,7 @@ router
         router.get('browse', [controllers.movies.Browses, 'view'])
 
         router.get('picked', [controllers.movies.Results, 'view'])
+        router.post('cancel', [controllers.movies.Results, 'cancel'])
 
         router.get(':movieId', [controllers.movies.Gets, 'fetch'])
       })

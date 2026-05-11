@@ -73,10 +73,12 @@ export class UserSchema extends BaseModel {
 }
 
 export class WatchlistItemSchema extends BaseModel {
-  static $columns = ['createdAt', 'lastWatched', 'movieId', 'userId', 'watched'] as const
+  static $columns = ['createdAt', 'firstWatchedAt', 'lastWatched', 'movieId', 'userId', 'watched'] as const
   $columns = WatchlistItemSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
+  @column.dateTime()
+  declare firstWatchedAt: DateTime | null
   @column.dateTime()
   declare lastWatched: DateTime | null
   @column()
