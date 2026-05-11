@@ -1,8 +1,13 @@
 import Genre from '#models/genre'
 import User from '#models/user'
 import type { HttpContext } from '@adonisjs/core/http'
+import { inject } from '@adonisjs/core'
+import { WatchlistService } from '#services/watchlist_service'
 
+@inject()
 export default class HomeController {
+  constructor(protected watchlistService: WatchlistService) {}
+
   async show({ auth, view }: HttpContext) {
     const user = auth.getUserOrFail()
     const otherId = user.id === 1 ? 2 : 1
@@ -20,12 +25,15 @@ export default class HomeController {
 
     const genres = await Genre.query().orderBy('name', 'asc')
 
+    const combinedWatchedList = await this.watchlistService.combinedWatchedList()
+
     return view.render('pages/home', {
       selfUnwatched,
       otherUnwatched,
       self: user,
       other: otherUser,
       genres,
+      combinedWatchedList,
     })
   }
 }

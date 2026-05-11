@@ -86,14 +86,30 @@
                   id: movie.id,
                   })
                 @end
-              @end
+              </div>
             </div>
           </div>
-
         </div>
       </div>
-
+      {{-- Their List --}}
+      <div class="md:pl-8 md:flex-1 mt-8 sm:w-full lg:w-[70%] m-auto">
+        <h2 class="text-zinc-900 text-lg font-semibold mb-4">
+          Watched 
+        </h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          @each(watchlistItem in combinedWatchedList)
+            @!component('components/movie', {
+                  title: watchlistItem.movie.title,
+                  release_date: watchlistItem.movie.release_date,
+                  poster_path: watchlistItem.movie.posterUrl,
+                  vote_average: watchlistItem.movie.voteAverage.toFixed(1),
+                  id: watchlistItem.movie.id,
+                  last_watched: watchlistItem.daysSinceWatched(),
+                  select_button: watchlistItem.userId === self.id,
+            })
+          @end
+        </div>
+      </div>
     </div>
   </div>
-</div>
 @end

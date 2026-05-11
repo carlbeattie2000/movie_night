@@ -1,5 +1,5 @@
 import { WatchlistItemSchema } from '#database/schema'
-import { belongsTo } from '@adonisjs/lucid/orm'
+import { belongsTo, computed } from '@adonisjs/lucid/orm'
 import User from './user.ts'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Movie from './movie.ts'
@@ -10,4 +10,13 @@ export default class WatchlistItem extends WatchlistItemSchema {
 
   @belongsTo(() => Movie)
   declare movie: BelongsTo<typeof Movie>
+
+  @computed()
+  daysSinceWatched(): number {
+    if (!this.lastWatched) {
+      return -1
+    }
+
+    return Math.round(this.lastWatched.diffNow('days').days)
+  }
 }
