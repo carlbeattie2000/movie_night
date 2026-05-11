@@ -79,7 +79,7 @@
                           Select
                         </button>
                       @end
-                      @form({ route: 'deletes.destroy', method: 'DELETE' })
+                      @form({ route: 'watchlists.destroy', method: 'DELETE' })
                         @field.root({ name: 'movie_id' })
                           @!input.control({ type: 'hidden', value: movie.id })
                         @end

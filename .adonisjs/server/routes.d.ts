@@ -11,13 +11,14 @@ export type ScannedRoutes = {
     'login.store': { paramsTuple?: []; params?: {} }
     'login.destroy': { paramsTuple?: []; params?: {} }
     'home.show': { paramsTuple?: []; params?: {} }
-    'adds.store_api': { paramsTuple?: []; params?: {} }
+    'watchlist.api.store': { paramsTuple?: []; params?: {} }
+    'watchlist.api.destroy': { paramsTuple?: []; params?: {} }
     'finds.create': { paramsTuple?: []; params?: {} }
     'finds.results': { paramsTuple?: []; params?: {} }
     'browses.view': { paramsTuple?: []; params?: {} }
     'gets.fetch': { paramsTuple: [ParamValue]; params: {'movieId': ParamValue} }
-    'adds.store': { paramsTuple?: []; params?: {} }
-    'deletes.destroy': { paramsTuple?: []; params?: {} }
+    'watchlists.store': { paramsTuple?: []; params?: {} }
+    'watchlists.destroy': { paramsTuple?: []; params?: {} }
     'selects.store': { paramsTuple?: []; params?: {} }
     'selects.random': { paramsTuple?: []; params?: {} }
     'results.show': { paramsTuple?: []; params?: {} }
@@ -46,15 +47,16 @@ export type ScannedRoutes = {
     'unsubscribe': { paramsTuple?: []; params?: {} }
     'login.store': { paramsTuple?: []; params?: {} }
     'login.destroy': { paramsTuple?: []; params?: {} }
-    'adds.store_api': { paramsTuple?: []; params?: {} }
+    'watchlist.api.store': { paramsTuple?: []; params?: {} }
     'finds.results': { paramsTuple?: []; params?: {} }
-    'adds.store': { paramsTuple?: []; params?: {} }
+    'watchlists.store': { paramsTuple?: []; params?: {} }
     'selects.store': { paramsTuple?: []; params?: {} }
     'selects.random': { paramsTuple?: []; params?: {} }
     'results.ready': { paramsTuple?: []; params?: {} }
   }
   DELETE: {
-    'deletes.destroy': { paramsTuple?: []; params?: {} }
+    'watchlist.api.destroy': { paramsTuple?: []; params?: {} }
+    'watchlists.destroy': { paramsTuple?: []; params?: {} }
   }
 }
 declare module '@adonisjs/core/types/http' {
