@@ -13,7 +13,7 @@ export interface MovieResult {
 export interface MovieSearchResult {
   page: number
   results: MovieResult[]
-  total_page: number
+  total_pages: number
   total_results: number
 }
 
