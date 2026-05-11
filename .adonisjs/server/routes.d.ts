@@ -16,6 +16,7 @@ export type ScannedRoutes = {
     'finds.create': { paramsTuple?: []; params?: {} }
     'finds.results': { paramsTuple?: []; params?: {} }
     'browses.view': { paramsTuple?: []; params?: {} }
+    'results.view': { paramsTuple?: []; params?: {} }
     'gets.fetch': { paramsTuple: [ParamValue]; params: {'movieId': ParamValue} }
     'watchlists.store': { paramsTuple?: []; params?: {} }
     'watchlists.destroy': { paramsTuple?: []; params?: {} }
@@ -30,6 +31,7 @@ export type ScannedRoutes = {
     'home.show': { paramsTuple?: []; params?: {} }
     'finds.create': { paramsTuple?: []; params?: {} }
     'browses.view': { paramsTuple?: []; params?: {} }
+    'results.view': { paramsTuple?: []; params?: {} }
     'gets.fetch': { paramsTuple: [ParamValue]; params: {'movieId': ParamValue} }
     'results.show': { paramsTuple?: []; params?: {} }
   }
@@ -39,6 +41,7 @@ export type ScannedRoutes = {
     'home.show': { paramsTuple?: []; params?: {} }
     'finds.create': { paramsTuple?: []; params?: {} }
     'browses.view': { paramsTuple?: []; params?: {} }
+    'results.view': { paramsTuple?: []; params?: {} }
     'gets.fetch': { paramsTuple: [ParamValue]; params: {'movieId': ParamValue} }
     'results.show': { paramsTuple?: []; params?: {} }
   }

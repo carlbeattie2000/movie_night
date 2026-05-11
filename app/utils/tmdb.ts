@@ -3,6 +3,7 @@ import {
   type SingleMovieResult,
   type MovieSearchResult,
   type GenresResult,
+  type Providers,
 } from '../contracts/tmdb.ts'
 
 const BASE_URL = 'https://api.themoviedb.org/3'
@@ -35,4 +36,5 @@ export const tmdb = {
     tmdbFetch<MovieSearchResult>(
       `/discover/movie?with_genres=${genreId}&include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&vote_count.gte=200`
     ),
+  providers: (movieId: number) => tmdbFetch<Providers>(`/movie/${movieId}/watch/providers`),
 }
