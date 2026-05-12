@@ -7,27 +7,25 @@ import { tmdb } from '../utils/tmdb.ts'
 type AddMovieResult = { status: 'success'; message: string } | { status: 'error'; message: string }
 
 export class WatchlistService {
-  async addMovie(tmdbMovieId: number, userId: number): Promise<AddMovieResult> {
-    const localMovieResult = await Movie.query().where('tmdbId', tmdbMovieId).first()
+  async #addFromLocalMovie(movie: Movie, userId: number): Promise<AddMovieResult> {
+    const alreadyExist = await WatchlistItem.query().where('movieId', movie.id).first()
 
-    if (localMovieResult) {
-      const alreadyExist = await WatchlistItem.query().where('movieId', localMovieResult.id).first()
-
-      if (alreadyExist) {
-        return {
-          status: 'error',
-          message:
-            alreadyExist.userId !== userId
-              ? 'Already on someone elses list'
-              : 'Movie already on watch list',
-        }
+    if (alreadyExist) {
+      return {
+        status: 'error',
+        message:
+          alreadyExist.userId !== userId
+            ? 'Already on someone elses list'
+            : 'Movie already on watch list',
       }
-
-      await WatchlistItem.create({ movieId: localMovieResult.id, userId })
-
-      return { status: 'success', message: 'Movie added' }
     }
 
+    await WatchlistItem.create({ movieId: movie.id, userId })
+
+    return { status: 'success', message: 'Movie added' }
+  }
+
+  async #addFromTMDB(tmdbMovieId: number, userId: number): Promise<AddMovieResult> {
     const tmdbMovieResult = await tmdb.movie(tmdbMovieId)
 
     if (tmdbMovieResult.status === 'invalid_json') {
@@ -53,6 +51,16 @@ export class WatchlistService {
     await WatchlistItem.create({ movieId: movie.id, userId })
 
     return { status: 'success', message: 'Movie added' }
+  }
+
+  async addMovie(tmdbMovieId: number, userId: number): Promise<AddMovieResult> {
+    const localMovieResult = await Movie.query().where('tmdbId', tmdbMovieId).first()
+
+    if (localMovieResult) {
+      return this.#addFromLocalMovie(localMovieResult, userId)
+    }
+
+    return this.#addFromTMDB(tmdbMovieId, userId)
   }
 
   async removeMovie(userId: number, movieId: number) {
