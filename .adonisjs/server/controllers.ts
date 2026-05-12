@@ -5,11 +5,10 @@
 
 export const controllers = {
   Login: () => import('#controllers/login_controller'),
+  Matches: () => import('#controllers/matches_controller'),
   movies: {
-    Browses: () => import('#controllers/movies/browses_controller'),
-    Finds: () => import('#controllers/movies/finds_controller'),
-    Gets: () => import('#controllers/movies/gets_controller'),
-    Results: () => import('#controllers/movies/results_controller'),
+    Api: () => import('#controllers/movies/api_controller'),
+    Movies: () => import('#controllers/movies/movies_controller'),
     Selects: () => import('#controllers/movies/selects_controller'),
   },
   watchlist: {

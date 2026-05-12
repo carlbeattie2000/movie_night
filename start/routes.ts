@@ -31,25 +31,36 @@ router
 
     router
       .group(() => {
-        router.post('/watchlist/add', [controllers.watchlist.Api, 'store'])
-        router.delete('/watchlist/remove', [controllers.watchlist.Api, 'destroy'])
+        router.post('add', [controllers.watchlist.Api, 'store'])
+        router.delete('remove', [controllers.watchlist.Api, 'destroy'])
       })
-      .prefix('api')
+      .prefix('api/watchlist')
       .as('watchlist')
 
     router
       .group(() => {
-        router.get('find', [controllers.movies.Finds, 'create'])
-        router.post('find', [controllers.movies.Finds, 'results'])
+        router.get(':movieId', [controllers.movies.Api, 'fetch'])
+      })
+      .prefix('api/movies')
+      .as('movies')
 
-        router.get('browse', [controllers.movies.Browses, 'view'])
+    router
+      .group(() => {
+        router.get('search', [controllers.movies.Movies, 'showSearch'])
+        router.post('search', [controllers.movies.Movies, 'searchResults'])
 
-        router.get('picked', [controllers.movies.Results, 'view'])
-        router.post('cancel', [controllers.movies.Results, 'cancel'])
-
-        router.get(':movieId', [controllers.movies.Gets, 'fetch'])
+        router.get('browse', [controllers.movies.Movies, 'browse'])
       })
       .prefix('movies')
+
+    router
+      .group(() => {
+        router.get('lobby', [controllers.Matches, 'lobby'])
+        router.post('ready', [controllers.Matches, 'ready'])
+        router.get('result', [controllers.Matches, 'result'])
+        router.post('cancel', [controllers.Matches, 'cancel'])
+      })
+      .prefix('match')
 
     router
       .group(() => {
@@ -62,8 +73,6 @@ router
       .group(() => {
         router.post('/', [controllers.movies.Selects, 'store'])
         router.post('/random', [controllers.movies.Selects, 'random'])
-        router.get('/', [controllers.movies.Results, 'show'])
-        router.post('/result/ready', [controllers.movies.Results, 'ready'])
       })
       .prefix('select')
   })
