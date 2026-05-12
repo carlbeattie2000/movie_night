@@ -8,9 +8,7 @@ import {
 
 const BASE_URL = 'https://api.themoviedb.org/3'
 
-type TMDBRequestResult<T> =
-  | { status: 'invalid_json'; message: string }
-  | { status: 'success'; result: T }
+type TMDBRequestResult<T> = { status: 'error'; message: string } | { status: 'success'; result: T }
 
 async function tmdbFetch<T>(path: string): Promise<TMDBRequestResult<T>> {
   const res = await fetch(`${BASE_URL}${path}`, {
@@ -23,7 +21,7 @@ async function tmdbFetch<T>(path: string): Promise<TMDBRequestResult<T>> {
     const jsonResult = (await res.json()) as unknown as T
     return { status: 'success', result: jsonResult }
   } catch {
-    return { status: 'invalid_json', message: 'Invalid JSON' }
+    return { status: 'error', message: 'Failed to parse JSON' }
   }
 }
 

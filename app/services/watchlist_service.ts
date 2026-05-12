@@ -3,6 +3,7 @@ import Movie from '#models/movie'
 import MovieGenre from '#models/movie_genre'
 import WatchlistItem from '#models/watchlist_item'
 import { tmdb } from '../utils/tmdb.ts'
+import db from '@adonisjs/lucid/services/db'
 
 type AddMovieResult = { status: 'success'; message: string } | { status: 'error'; message: string }
 
@@ -28,27 +29,33 @@ export class WatchlistService {
   async #addFromTMDB(tmdbMovieId: number, userId: number): Promise<AddMovieResult> {
     const tmdbMovieResult = await tmdb.movie(tmdbMovieId)
 
-    if (tmdbMovieResult.status === 'invalid_json') {
-      return { status: 'error', message: tmdbMovieResult.message }
+    if (tmdbMovieResult.status === 'error') {
+      return { status: 'error', message: 'Failed to fetch movie from TMDB' }
     }
 
     const tmdbMovie = tmdbMovieResult.result
 
-    const movie = await Movie.create({
-      tmdbId: tmdbMovie.id,
-      title: tmdbMovie.title,
-      posterUrl: `https://image.tmdb.org/t/p/w500${tmdbMovie.poster_path}`,
-      voteAverage: tmdbMovie.vote_average,
+    await db.transaction(async (trx) => {
+      const movie = await Movie.create(
+        {
+          tmdbId: tmdbMovie.id,
+          title: tmdbMovie.title,
+          posterUrl: `https://image.tmdb.org/t/p/w500${tmdbMovie.poster_path}`,
+          voteAverage: tmdbMovie.vote_average,
+        },
+        { client: trx }
+      )
+
+      const genreIdMap = tmdbMovie.genres.map((g) => g.id)
+      const genres = await Genre.query({ client: trx }).whereIn('tmdbId', genreIdMap)
+
+      await MovieGenre.createMany(
+        genres.map((genre) => ({ movieId: movie.id, genreId: genre.id })),
+        { client: trx }
+      )
+
+      await WatchlistItem.create({ movieId: movie.id, userId }, { client: trx })
     })
-
-    const genreIdMap = tmdbMovie.genres.map((g) => g.id)
-    const genres = await Genre.query().whereIn('tmdbId', genreIdMap)
-
-    for (const genre of genres) {
-      await MovieGenre.create({ movieId: movie.id, genreId: genre.id })
-    }
-
-    await WatchlistItem.create({ movieId: movie.id, userId })
 
     return { status: 'success', message: 'Movie added' }
   }
