@@ -13,38 +13,38 @@ export type ScannedRoutes = {
     'home.show': { paramsTuple?: []; params?: {} }
     'watchlist.api.store': { paramsTuple?: []; params?: {} }
     'watchlist.api.destroy': { paramsTuple?: []; params?: {} }
-    'finds.create': { paramsTuple?: []; params?: {} }
-    'finds.results': { paramsTuple?: []; params?: {} }
-    'browses.view': { paramsTuple?: []; params?: {} }
-    'results.view': { paramsTuple?: []; params?: {} }
-    'results.cancel': { paramsTuple?: []; params?: {} }
-    'gets.fetch': { paramsTuple: [ParamValue]; params: {'movieId': ParamValue} }
+    'movies.api.fetch': { paramsTuple: [ParamValue]; params: {'movieId': ParamValue} }
+    'movies.show_search': { paramsTuple?: []; params?: {} }
+    'movies.search_results': { paramsTuple?: []; params?: {} }
+    'movies.browse': { paramsTuple?: []; params?: {} }
+    'matches.lobby': { paramsTuple?: []; params?: {} }
+    'matches.ready': { paramsTuple?: []; params?: {} }
+    'matches.result': { paramsTuple?: []; params?: {} }
+    'matches.cancel': { paramsTuple?: []; params?: {} }
     'watchlists.store': { paramsTuple?: []; params?: {} }
     'watchlists.destroy': { paramsTuple?: []; params?: {} }
     'selects.store': { paramsTuple?: []; params?: {} }
     'selects.random': { paramsTuple?: []; params?: {} }
-    'results.show': { paramsTuple?: []; params?: {} }
-    'results.ready': { paramsTuple?: []; params?: {} }
   }
   GET: {
     'event_stream': { paramsTuple?: []; params?: {} }
     'login.create': { paramsTuple?: []; params?: {} }
     'home.show': { paramsTuple?: []; params?: {} }
-    'finds.create': { paramsTuple?: []; params?: {} }
-    'browses.view': { paramsTuple?: []; params?: {} }
-    'results.view': { paramsTuple?: []; params?: {} }
-    'gets.fetch': { paramsTuple: [ParamValue]; params: {'movieId': ParamValue} }
-    'results.show': { paramsTuple?: []; params?: {} }
+    'movies.api.fetch': { paramsTuple: [ParamValue]; params: {'movieId': ParamValue} }
+    'movies.show_search': { paramsTuple?: []; params?: {} }
+    'movies.browse': { paramsTuple?: []; params?: {} }
+    'matches.lobby': { paramsTuple?: []; params?: {} }
+    'matches.result': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'event_stream': { paramsTuple?: []; params?: {} }
     'login.create': { paramsTuple?: []; params?: {} }
     'home.show': { paramsTuple?: []; params?: {} }
-    'finds.create': { paramsTuple?: []; params?: {} }
-    'browses.view': { paramsTuple?: []; params?: {} }
-    'results.view': { paramsTuple?: []; params?: {} }
-    'gets.fetch': { paramsTuple: [ParamValue]; params: {'movieId': ParamValue} }
-    'results.show': { paramsTuple?: []; params?: {} }
+    'movies.api.fetch': { paramsTuple: [ParamValue]; params: {'movieId': ParamValue} }
+    'movies.show_search': { paramsTuple?: []; params?: {} }
+    'movies.browse': { paramsTuple?: []; params?: {} }
+    'matches.lobby': { paramsTuple?: []; params?: {} }
+    'matches.result': { paramsTuple?: []; params?: {} }
   }
   POST: {
     'subscribe': { paramsTuple?: []; params?: {} }
@@ -52,12 +52,12 @@ export type ScannedRoutes = {
     'login.store': { paramsTuple?: []; params?: {} }
     'login.destroy': { paramsTuple?: []; params?: {} }
     'watchlist.api.store': { paramsTuple?: []; params?: {} }
-    'finds.results': { paramsTuple?: []; params?: {} }
-    'results.cancel': { paramsTuple?: []; params?: {} }
+    'movies.search_results': { paramsTuple?: []; params?: {} }
+    'matches.ready': { paramsTuple?: []; params?: {} }
+    'matches.cancel': { paramsTuple?: []; params?: {} }
     'watchlists.store': { paramsTuple?: []; params?: {} }
     'selects.store': { paramsTuple?: []; params?: {} }
     'selects.random': { paramsTuple?: []; params?: {} }
-    'results.ready': { paramsTuple?: []; params?: {} }
   }
   DELETE: {
     'watchlist.api.destroy': { paramsTuple?: []; params?: {} }

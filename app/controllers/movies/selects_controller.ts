@@ -12,7 +12,7 @@ export default class SelectsController {
       selections: selectionService.get(),
     })
 
-    return response.redirect().toRoute('results.show')
+    return response.redirect().toRoute('matches.lobby')
   }
 
   async random({ auth, response }: HttpContext) {
@@ -27,6 +27,6 @@ export default class SelectsController {
       selections: selectionService.get(),
     })
 
-    return response.redirect().toRoute('results.show')
+    return response.redirect().toRoute('matches.lobby')
   }
 }

@@ -4,11 +4,11 @@ import selectionService from '#services/selection_service'
 import type { HttpContext } from '@adonisjs/core/http'
 import transmit from '@adonisjs/transmit/services/main'
 import { DateTime } from 'luxon'
-import { tmdb } from '../../utils/tmdb.ts'
+import { tmdb } from '../utils/tmdb.ts'
 
-export default class ResultsController {
-  async show({ view }: HttpContext) {
-    return view.render('pages/movies/result')
+export default class MatchesController {
+  async lobby({ view }: HttpContext) {
+    return view.render('pages/movies/lobby')
   }
 
   async ready({ auth, response }: HttpContext) {
@@ -37,10 +37,10 @@ export default class ResultsController {
       selectionService.clear()
     }
 
-    return response.ok({})
+    return response.noContent()
   }
 
-  async view({ view, response, session }: HttpContext) {
+  async result({ view, response, session }: HttpContext) {
     const lastPicked = await MoviePickedResult.query()
       .orderBy('createdAt', 'desc')
       .preload('movie')

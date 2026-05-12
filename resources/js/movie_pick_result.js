@@ -11,10 +11,10 @@ async function init() {
 
   subscription.onMessage((data) => {
     if (!data.winner) return
-    window.location.href = 'movies/picked'
+    window.location.href = '/match/result'
   })
 
-  await fetch('/select/result/ready', {
+  await fetch('/match/ready', {
     method: 'POST',
   })
 }

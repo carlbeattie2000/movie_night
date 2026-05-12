@@ -13,7 +13,7 @@
 
     @if(auth.user)
       <div class="flex-1">
-        @form({ route: 'finds.results', method: 'POST' })
+        @form({ route: 'movies.search_results', method: 'POST' })
           <div class="relative">
             @field.root({ name: 'title' })
               @!input.control({ type: 'text', placeholder: 'Search movies…' })
