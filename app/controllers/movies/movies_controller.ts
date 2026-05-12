@@ -1,9 +1,12 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { tmdb } from '../../utils/tmdb.ts'
-import { DateTime } from 'luxon'
 import { browseFilterValidator } from '#validators/browse_filter'
+import { MovieService } from '#services/movie_service'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class MoviesController {
+  constructor(protected movieService: MovieService) {}
+
   async showSearch({ view }: HttpContext) {
     return view.render('pages/movies/find')
   }
@@ -11,40 +14,34 @@ export default class MoviesController {
   async searchResults({ request, view, response, session }: HttpContext) {
     const query = request.input('title')
 
-    const searchResult = await tmdb.search(query)
+    const searchResults = await this.movieService.searchForMovie(query)
 
-    if (searchResult.status === 'invalid_json') {
-      session.flash('error', searchResult.message)
+    if (searchResults.status === 'error') {
+      session.flash('error', searchResults.message)
       return response.redirect().toRoute('home.show')
     }
 
-    searchResult.result.results.forEach((r) => {
-      r.poster_path = `https://image.tmdb.org/t/p/w500${r.poster_path}`
-      r.release_date = DateTime.fromISO(r.release_date).toFormat('d LLLL yyyy')
-    })
+    const { results } = searchResults.result
 
-    return view.render('pages/movies/results', { results: searchResult.result.results })
+    return view.render('pages/movies/results', { results })
   }
 
   async browse({ request, view, response, session }: HttpContext) {
     const { genreId, page } = await request.validateUsing(browseFilterValidator)
 
-    const moviesResult = await tmdb.movies(genreId, page ?? 1)
+    const moviesResult = await this.movieService.browseByCategory(genreId, page ?? 1)
 
-    if (moviesResult.status === 'invalid_json') {
+    if (moviesResult.status === 'error') {
       session.flash('error', moviesResult.message)
       return response.redirect().toRoute('home.show')
     }
 
-    moviesResult.result.results.forEach((r) => {
-      r.poster_path = `https://image.tmdb.org/t/p/w500${r.poster_path}`
-      r.release_date = DateTime.fromISO(r.release_date).toFormat('d LLLL yyyy')
-    })
+    const { result } = moviesResult
 
     return view.render('pages/movies/browse', {
-      movies: moviesResult.result.results,
-      totalPages: moviesResult.result.total_pages,
-      currentPage: moviesResult.result.page,
+      movies: result.results,
+      totalPages: result.total_pages,
+      currentPage: result.page,
       genreId,
     })
   }
