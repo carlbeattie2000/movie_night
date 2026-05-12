@@ -64,13 +64,6 @@ router
 
     router
       .group(() => {
-        router.post('add', [controllers.watchlist.Watchlists, 'store'])
-        router.delete('delete', [controllers.watchlist.Watchlists, 'destroy'])
-      })
-      .prefix('watchlist')
-
-    router
-      .group(() => {
         router.post('/', [controllers.movies.Selects, 'store'])
         router.post('/random', [controllers.movies.Selects, 'random'])
       })

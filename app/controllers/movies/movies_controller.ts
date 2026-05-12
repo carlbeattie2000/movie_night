@@ -11,32 +11,19 @@ export default class MoviesController {
     return view.render('pages/movies/find')
   }
 
-  async searchResults({ request, view, response, session }: HttpContext) {
+  async searchResults({ request, view }: HttpContext) {
     const query = request.input('title')
 
     const searchResults = await this.movieService.searchForMovie(query)
-
-    if (searchResults.status === 'error') {
-      session.flash('error', searchResults.message)
-      return response.redirect().toRoute('home.show')
-    }
-
-    const { results } = searchResults.result
+    const { results } = searchResults
 
     return view.render('pages/movies/results', { results })
   }
 
-  async browse({ request, view, response, session }: HttpContext) {
+  async browse({ request, view }: HttpContext) {
     const { genreId, page } = await request.validateUsing(browseFilterValidator)
 
-    const moviesResult = await this.movieService.browseByCategory(genreId, page ?? 1)
-
-    if (moviesResult.status === 'error') {
-      session.flash('error', moviesResult.message)
-      return response.redirect().toRoute('home.show')
-    }
-
-    const { result } = moviesResult
+    const result = await this.movieService.browseByCategory(genreId, page ?? 1)
 
     return view.render('pages/movies/browse', {
       movies: result.results,

@@ -14,6 +14,5 @@ export const controllers = {
   watchlist: {
     Api: () => import('#controllers/watchlist/api_controller'),
     Home: () => import('#controllers/watchlist/home_controller'),
-    Watchlists: () => import('#controllers/watchlist/watchlists_controller'),
   },
 }
