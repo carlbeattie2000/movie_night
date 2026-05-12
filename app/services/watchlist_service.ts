@@ -11,13 +11,16 @@ export class WatchlistService {
     const localMovieResult = await Movie.query().where('tmdbId', tmdbMovieId).first()
 
     if (localMovieResult) {
-      const alreadyExist = await WatchlistItem.query()
-        .where('userId', userId)
-        .andWhere('movieId', localMovieResult.id)
-        .first()
+      const alreadyExist = await WatchlistItem.query().where('movieId', localMovieResult.id).first()
 
       if (alreadyExist) {
-        return { status: 'error', message: 'Movie already on watch list' }
+        return {
+          status: 'error',
+          message:
+            alreadyExist.userId !== userId
+              ? 'Already on someone elses list'
+              : 'Movie already on watch list',
+        }
       }
 
       await WatchlistItem.create({ movieId: localMovieResult.id, userId })
