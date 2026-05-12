@@ -1,10 +1,7 @@
 import { DateTime } from 'luxon'
 import { type MovieResult, type MovieSearchResult } from '../contracts/tmdb.ts'
 import { tmdb } from '../utils/tmdb.ts'
-
-type MovieQueryResult =
-  | { status: 'success'; result: MovieSearchResult }
-  | { status: 'error'; message: string }
+import { FlashException } from '../errors/flash_exception.ts'
 
 export class MovieService {
   #formatMovieResults(movieResults: MovieResult[]): MovieResult[] {
@@ -15,31 +12,23 @@ export class MovieService {
     }))
   }
 
-  async searchForMovie(title: string): Promise<MovieQueryResult> {
+  async searchForMovie(title: string): Promise<MovieSearchResult> {
     const searchResult = await tmdb.search(title)
-
     if (searchResult.status === 'error') {
-      return { status: 'error', message: 'Failed to fetch movie from TMDB' }
+      throw new FlashException('Failed to fetch movie from TMDB', 'movies.show_search')
     }
 
     const { result } = searchResult
-
-    result.results = this.#formatMovieResults(result.results)
-
-    return { status: 'success', result }
+    return { ...result, results: this.#formatMovieResults(result.results) }
   }
 
-  async browseByCategory(genreId: number, page: number): Promise<MovieQueryResult> {
+  async browseByCategory(genreId: number, page: number): Promise<MovieSearchResult> {
     const moviesResult = await tmdb.movies(genreId, page ?? 1)
-
     if (moviesResult.status === 'error') {
-      return { status: 'error', message: 'Failed to fetch movie from TMDB' }
+      throw new FlashException('Failed to fetch movie from TMDB', 'home.show')
     }
 
     const { result } = moviesResult
-
-    result.results = this.#formatMovieResults(result.results)
-
-    return { status: 'success', result }
+    return { ...result, results: this.#formatMovieResults(result.results) }
   }
 }

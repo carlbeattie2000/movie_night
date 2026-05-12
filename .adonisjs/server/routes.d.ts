@@ -21,8 +21,6 @@ export type ScannedRoutes = {
     'matches.ready': { paramsTuple?: []; params?: {} }
     'matches.result': { paramsTuple?: []; params?: {} }
     'matches.cancel': { paramsTuple?: []; params?: {} }
-    'watchlists.store': { paramsTuple?: []; params?: {} }
-    'watchlists.destroy': { paramsTuple?: []; params?: {} }
     'selects.store': { paramsTuple?: []; params?: {} }
     'selects.random': { paramsTuple?: []; params?: {} }
   }
@@ -55,13 +53,11 @@ export type ScannedRoutes = {
     'movies.search_results': { paramsTuple?: []; params?: {} }
     'matches.ready': { paramsTuple?: []; params?: {} }
     'matches.cancel': { paramsTuple?: []; params?: {} }
-    'watchlists.store': { paramsTuple?: []; params?: {} }
     'selects.store': { paramsTuple?: []; params?: {} }
     'selects.random': { paramsTuple?: []; params?: {} }
   }
   DELETE: {
     'watchlist.api.destroy': { paramsTuple?: []; params?: {} }
-    'watchlists.destroy': { paramsTuple?: []; params?: {} }
   }
 }
 declare module '@adonisjs/core/types/http' {
