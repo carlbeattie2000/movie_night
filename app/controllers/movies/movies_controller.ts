@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { browseFilterValidator } from '#validators/browse_filter'
 import { MovieService } from '#services/movie_service'
 import { inject } from '@adonisjs/core'
+import MovieResultTransformer from '#transformers/movie_result_transformer'
 
 @inject()
 export default class MoviesController {
@@ -11,13 +12,15 @@ export default class MoviesController {
     return view.render('pages/movies/find')
   }
 
-  async searchResults({ request, view }: HttpContext) {
+  async searchResults({ request, inertia }: HttpContext) {
     const query = request.input('title')
 
     const searchResults = await this.movieService.searchForMovie(query)
     const { results } = searchResults
 
-    return view.render('pages/movies/results', { results })
+    return inertia.render('search/index', {
+      result: MovieResultTransformer.transform(results),
+    })
   }
 
   async browse({ request, view }: HttpContext) {

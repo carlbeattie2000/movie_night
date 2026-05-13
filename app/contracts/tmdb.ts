@@ -8,6 +8,7 @@ export interface MovieResult {
   popularity: number
   poster_path: string
   release_date: string
+  vote_average: number
 }
 
 export interface MovieSearchResult {

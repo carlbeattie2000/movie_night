@@ -12,7 +12,7 @@ type MovieCardProps = {
   addBtn?: boolean
   removeBtn?: boolean
   onRemove?: React.MouseEventHandler<HTMLButtonElement>
-} & Data.Movie
+} & Partial<Data.Movie>
 
 export default function MovieCard({
   id,
@@ -70,7 +70,7 @@ export default function MovieCard({
       <div className="p-3 flex flex-col gap-1">
         <p className="text-zinc-900 text-md font-semibold leading-tight line-clamp-1">{title}</p>
         {releaseDate && <p className="text-zinc-500 text-xs mt-0.5">{releaseDate}</p>}
-        {voteAverage && <p className="text-zinc-500 text-xs mt-0.5">★ {voteAverage}</p>}
+        {voteAverage && <p className="text-zinc-500 text-xs mt-0.5">★ {voteAverage.toFixed(1)}</p>}
         {lastWatched && lastWatched >= 0 && (
           <p className="text-zinc-500 text-xs mt-0.5">
             Last watched: {lastWatched === 0 ? 'Today' : `${lastWatched} days ago`}
