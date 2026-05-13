@@ -23,13 +23,13 @@ export default class MoviesController {
     })
   }
 
-  async browse({ request, view }: HttpContext) {
+  async browse({ request, inertia }: HttpContext) {
     const { genreId, page } = await request.validateUsing(browseFilterValidator)
 
     const result = await this.movieService.browseByCategory(genreId, page ?? 1)
 
-    return view.render('pages/movies/browse', {
-      movies: result.results,
+    return inertia.render('browse/index', {
+      result: MovieResultTransformer.transform(result.results),
       totalPages: result.total_pages,
       currentPage: result.page,
       genreId,
