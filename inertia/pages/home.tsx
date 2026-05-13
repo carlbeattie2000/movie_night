@@ -32,9 +32,6 @@ export default function Home({ genres, selfUnwatched, otherUnwatched, user, othe
     }
   }
 
-  const onSelect = () => {
-  }
-
   const updateLocalSearchResults = () => {
     if (localSearchInput === '') {
       return setUsersUnwatched(selfUnwatched)
