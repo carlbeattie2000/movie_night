@@ -17,5 +17,6 @@ declare module '@adonisjs/inertia/types' {
     'home': ExtractProps<(typeof import('../../inertia/pages/home.tsx'))['default']>
     'search/index': ExtractProps<(typeof import('../../inertia/pages/search/index.tsx'))['default']>
     'browse/index': ExtractProps<(typeof import('../../inertia/pages/browse/index.tsx'))['default']>
+    'lobby/index': ExtractProps<(typeof import('../../inertia/pages/lobby/index.tsx'))['default']>
   }
 }

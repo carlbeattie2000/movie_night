@@ -7,8 +7,8 @@ import { DateTime } from 'luxon'
 import { tmdb } from '../utils/tmdb.ts'
 
 export default class MatchesController {
-  async lobby({ view }: HttpContext) {
-    return view.render('pages/movies/lobby')
+  async lobby({ inertia }: HttpContext) {
+    return inertia.render('lobby/index', {})
   }
 
   async ready({ auth, response }: HttpContext) {
