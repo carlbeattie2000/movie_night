@@ -7,14 +7,9 @@
 |
 */
 
-import transmit from '@adonisjs/transmit/services/main'
 import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
-
-transmit.registerRoutes((route) => {
-  route.middleware(middleware.auth())
-})
 
 router
   .group(() => {
@@ -56,8 +51,6 @@ router
     router
       .group(() => {
         router.get('lobby', [controllers.Matches, 'lobby'])
-        router.post('ready', [controllers.Matches, 'ready'])
-        router.get('result', [controllers.Matches, 'result'])
         router.post('cancel', [controllers.Matches, 'cancel'])
       })
       .prefix('match')
