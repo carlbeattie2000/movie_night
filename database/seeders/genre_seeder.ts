@@ -6,7 +6,7 @@ export default class extends BaseSeeder {
   async run() {
     const genresResult = await tmdb.genres()
 
-    if (genresResult.status === 'invalid_json') {
+    if (genresResult.status === 'error') {
       throw new Error(genresResult.message)
     }
 

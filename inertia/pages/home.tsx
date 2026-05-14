@@ -9,6 +9,7 @@ type PageProps = InertiaProps<{
   genres: Data.Genre[]
   selfUnwatched: Data.Movie[]
   otherUnwatched: Data.Movie[]
+  combinedWatched: Data.Movie[]
   other: Data.User
 }>
 

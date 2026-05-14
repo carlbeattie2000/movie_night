@@ -11,7 +11,7 @@ import UserTransformer from '#transformers/user_transformer'
 export default class HomeController {
   constructor(protected watchlistService: WatchlistService) {}
 
-  async show({ auth, view, inertia }: HttpContext) {
+  async show({ auth, inertia }: HttpContext) {
     const user = auth.getUserOrFail()
     const otherId = user.id === 1 ? 2 : 1
 
@@ -35,15 +35,9 @@ export default class HomeController {
       otherUnwatched: MovieTransformer.transform(otherUnwatched),
       other: UserTransformer.transform(otherUser),
       genres: GenreTransformer.transform(genres),
+      combinedWatched: MovieTransformer.transform(
+        combinedWatchedList.map((watchList) => watchList.movie)
+      ),
     })
-
-    // return view.render('pages/home', {
-    //   selfUnwatched,
-    //   otherUnwatched,
-    //   self: user,
-    //   other: otherUser,
-    //   genres,
-    //   combinedWatchedList,
-    // })
   }
 }
