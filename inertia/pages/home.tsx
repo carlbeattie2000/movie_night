@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { GenreSidebar } from '~/components/genre_sidebar'
 import { MobileGenreScrollList } from '~/components/mobile_genre_scroll_list'
 import MovieCard from '~/components/movie_card'
+import Popcorn from '~/components/popcorn'
 import { InertiaProps } from '~/types'
 
 type PageProps = InertiaProps<{
@@ -52,7 +53,9 @@ export default function Home({ genres, selfUnwatched, otherUnwatched, user, othe
   return (
     <>
       <div className="min-h-screen bg-white">
-        <div className="max-w-7xl mx-auto px-4 py-6">
+        <Popcorn amount={256} />
+
+        <div className="max-w-7xl mx-auto px-4 py-6 relative z-20">
           <MobileGenreScrollList genres={genres} />
 
           <div className="flex gap-8">

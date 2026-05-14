@@ -1,6 +1,7 @@
 import { Form } from '@adonisjs/inertia/react'
 import { useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
+import Popcorn from '~/components/popcorn'
 import { InertiaProps } from '~/types'
 
 type Provider = {
@@ -38,39 +39,7 @@ export default function Index({ user }: PageProps) {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-white flex items-center justify-center px-6">
-      {/* Floating kernels */}
-      {[...Array(24)].map((_, i) => (
-        <div
-          key={`kernel-${i}`}
-          className="absolute w-3 h-4 rounded-full bg-yellow-400 opacity-80 animate-[kernel_6s_linear_infinite]"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 6}s`,
-          }}
-        />
-      ))}
-
-      {/* Popcorn pops */}
-      {[...Array(12)].map((_, i) => (
-        <div
-          key={`pop-${i}`}
-          className="absolute animate-[pop_4s_ease-out_infinite]"
-          style={{
-            left: `${10 + Math.random() * 80}%`,
-            top: `${10 + Math.random() * 80}%`,
-            animationDelay: `${i * 0.7}s`,
-          }}
-        >
-          <div className="relative flex items-center justify-center">
-            <div className="w-8 h-8 rounded-full bg-zinc-50 shadow-sm border border-yellow-100" />
-            <div className="absolute inset-0 rounded-full border border-yellow-300 animate-ping opacity-40" />
-            <span className="absolute -top-2 left-1 w-1 h-1 rounded-full bg-yellow-400" />
-            <span className="absolute top-0 -right-2 w-1 h-1 rounded-full bg-yellow-400" />
-            <span className="absolute -bottom-1 left-6 w-1 h-1 rounded-full bg-yellow-400" />
-          </div>
-        </div>
-      ))}
+      <Popcorn amount={128} />
 
       {/* Waiting state */}
       <div
