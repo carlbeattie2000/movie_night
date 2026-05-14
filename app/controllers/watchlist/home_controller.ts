@@ -3,12 +3,15 @@ import User from '#models/user'
 import type { HttpContext } from '@adonisjs/core/http'
 import { inject } from '@adonisjs/core'
 import { WatchlistService } from '#services/watchlist_service'
+import GenreTransformer from '../../transformers/genre_transformer.ts'
+import MovieTransformer from '../../transformers/movie_transformer.ts'
+import UserTransformer from '#transformers/user_transformer'
 
 @inject()
 export default class HomeController {
   constructor(protected watchlistService: WatchlistService) {}
 
-  async show({ auth, view }: HttpContext) {
+  async show({ auth, view, inertia }: HttpContext) {
     const user = auth.getUserOrFail()
     const otherId = user.id === 1 ? 2 : 1
 
@@ -27,13 +30,20 @@ export default class HomeController {
 
     const combinedWatchedList = await this.watchlistService.combinedWatchedList()
 
-    return view.render('pages/home', {
-      selfUnwatched,
-      otherUnwatched,
-      self: user,
-      other: otherUser,
-      genres,
-      combinedWatchedList,
+    return inertia.render('home', {
+      selfUnwatched: MovieTransformer.transform(selfUnwatched),
+      otherUnwatched: MovieTransformer.transform(otherUnwatched),
+      other: UserTransformer.transform(otherUser),
+      genres: GenreTransformer.transform(genres),
     })
+
+    // return view.render('pages/home', {
+    //   selfUnwatched,
+    //   otherUnwatched,
+    //   self: user,
+    //   other: otherUser,
+    //   genres,
+    //   combinedWatchedList,
+    // })
   }
 }
