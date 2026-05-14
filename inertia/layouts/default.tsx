@@ -1,88 +1,91 @@
-import { Form } from '@adonisjs/inertia/react'
+import { Data } from '@generated/data'
+import { toast, Toaster } from 'sonner'
+import { usePage } from '@inertiajs/react'
+import { ReactElement, useEffect } from 'react'
+import { Form, Link } from '@adonisjs/inertia/react'
+import Input from '~/components/input'
 
-export default function Login() {
+export default function Layout({ children }: { children: ReactElement<Data.SharedProps> }) {
+  useEffect(() => {
+    toast.dismiss()
+  }, [usePage().url])
+
+  useEffect(() => {
+    if (children.props.flash.error) {
+      toast.error(children.props.flash.error)
+    }
+    if (children.props.flash.success) {
+      toast.success(children.props.flash.success)
+    }
+  })
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-white flex items-center justify-center px-6 py-20 md:py-28">
-      {/* Floating kernels */}
-      {[...Array(26)].map((_, i) => (
-        <div
-          key={`kernel-${i}`}
-          className="absolute w-3 h-4 rounded-full bg-yellow-400 opacity-75 animate-[kernel_6.5s_linear_infinite]"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            animationDelay: `-${Math.random() * 6.5}s`,
-          }}
-        />
-      ))}
-
-      {/* Popcorn pops */}
-      {[...Array(12)].map((_, i) => (
-        <div
-          key={`pop-${i}`}
-          className="absolute animate-[pop_4.2s_ease-out_infinite]"
-          style={{
-            left: `${10 + Math.random() * 80}%`,
-            top: `${12 + Math.random() * 75}%`,
-            animationDelay: `${i * 0.7}s`,
-          }}
-        >
-          <div className="relative w-12 h-12 flex items-center justify-center">
-            <div className="w-10 h-10 rounded-full bg-white shadow-md border border-yellow-200" />
-            <div className="absolute inset-0 rounded-full border border-yellow-300/70 animate-ping" />
-            <span className="absolute -top-1 left-2 w-1.5 h-1.5 bg-yellow-400 rounded-full" />
-            <span className="absolute top-2 -right-1 w-1 h-1 bg-yellow-400 rounded-full" />
-            <span className="absolute -bottom-1 left-6 w-1.5 h-1 bg-yellow-400 rounded-full" />
-          </div>
-        </div>
-      ))}
-
-      {/* Wider Card */}
-      <div className="relative z-10 w-full max-w-xl">
-        <div className="bg-white rounded-3xl shadow-xl border border-yellow-100 p-10 md:p-14">
-
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-zinc-800">
-              Welcome Back
-            </h1>
+    <>
+      <header className="border-b border-zinc-800 bg-zinc-950">
+        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+          <div className="text-white shrink-0">
+            <Link route="home.show">
+              <div className="flex items-center gap-2">
+                <span className="text-yellow-400 text-xl">🎬</span>
+                <span className="font-semibold">
+                  Carl<span className="text-yellow-400 font-bold">&</span>Izzy
+                </span>
+                <span className="text-zinc-500 text-sm font-normal hidden sm:inline">movies</span>
+              </div>
+            </Link>
           </div>
 
-          {/* Form */}
-          <Form route='login.store' formMethod='POST' className="space-y-8">
-            <div>
-              <input
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                className="w-full px-7 py-5 bg-zinc-50 border border-zinc-200 rounded-2xl focus:border-yellow-400 focus:ring-4 focus:ring-yellow-100 outline-none text-lg transition-all duration-300 placeholder-zinc-400"
-              />
+          {children.props.user && (
+            <div className="flex-1">
+              <Form route="movies.search_results">
+                <div className="relative">
+                  <Input name="title" type="text" placeholder="Search movies..." />
+                  <button
+                    type="submit"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-yellow-400 transition-colors duration-150"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </Form>
             </div>
+          )}
 
-            <button
-              type="submit"
-              className="w-full bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-600 text-zinc-900 font-semibold text-lg py-5 rounded-2xl transition-all duration-200 shadow-md hover:shadow-lg active:scale-[0.985]"
-            >
-              Login
-            </button>
-          </Form>
+          <nav className="flex items-center gap-3 shrink-0">
+            {children.props.user ? (
+              <>
+                <Form route="login.destroy">
+                  <button
+                    type="submit"
+                    className="text-zinc-400 hover:text-white text-sm transition-colors duration-150"
+                  >
+                    Logout
+                  </button>
+                </Form>
+              </>
+            ) : (
+              <>
+                <Link route="login.create">Login</Link>
+              </>
+            )}
+          </nav>
         </div>
-      </div>
-
-      <style>{`
-        @keyframes kernel {
-          0% { transform: translateY(30px) rotate(0deg); opacity: 0; }
-          15% { opacity: 0.8; }
-          100% { transform: translateY(-140px) rotate(380deg); opacity: 0; }
-        }
-
-        @keyframes pop {
-          0% { transform: scale(0.2) translateY(15px); opacity: 0; }
-          25% { transform: scale(1.25); opacity: 1; }
-          45% { transform: scale(0.95); }
-          100% { transform: scale(1.05) translateY(-25px); opacity: 0; }
-        }
-      `}</style>
-    </div>
+      </header>
+      <main>{children}</main>
+      <Toaster position="top-center" richColors />
+    </>
   )
 }

@@ -8,7 +8,7 @@ export function getIO() {
 }
 
 export function createIO(httpServer: HttpServer | undefined) {
-  if (!httpServer) throw new Error('HTTP server not ready')
+  if (!httpServer) return
   io = new Server(httpServer)
   return io
 }
