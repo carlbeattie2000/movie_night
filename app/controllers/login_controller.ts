@@ -3,8 +3,8 @@ import type { HttpContext } from '@adonisjs/core/http'
 import hash from '@adonisjs/core/services/hash'
 
 export default class LoginController {
-  async create({ view }: HttpContext) {
-    return view.render('pages/auth/login')
+  async create({ inertia }: HttpContext) {
+    return inertia.render('login', {})
   }
 
   async store({ request, auth, response }: HttpContext) {

@@ -7,42 +7,6 @@ import type { InferInput, SimpleError } from '@vinejs/vine/types'
 export type ParamValue = string | number | bigint | boolean
 
 export interface Registry {
-  'event_stream': {
-    methods: ["GET","HEAD"]
-    pattern: '/__transmit/events'
-    types: {
-      body: {}
-      paramsTuple: []
-      params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-    }
-  }
-  'subscribe': {
-    methods: ["POST"]
-    pattern: '/__transmit/subscribe'
-    types: {
-      body: {}
-      paramsTuple: []
-      params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-    }
-  }
-  'unsubscribe': {
-    methods: ["POST"]
-    pattern: '/__transmit/unsubscribe'
-    types: {
-      body: {}
-      paramsTuple: []
-      params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-    }
-  }
   'login.create': {
     methods: ["GET","HEAD"]
     pattern: '/login'
@@ -173,30 +137,6 @@ export interface Registry {
       query: {}
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/matches_controller').default['lobby']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/matches_controller').default['lobby']>>>
-    }
-  }
-  'matches.ready': {
-    methods: ["POST"]
-    pattern: '/match/ready'
-    types: {
-      body: {}
-      paramsTuple: []
-      params: {}
-      query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/matches_controller').default['ready']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/matches_controller').default['ready']>>>
-    }
-  }
-  'matches.result': {
-    methods: ["GET","HEAD"]
-    pattern: '/match/result'
-    types: {
-      body: {}
-      paramsTuple: []
-      params: {}
-      query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/matches_controller').default['result']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/matches_controller').default['result']>>>
     }
   }
   'matches.cancel': {

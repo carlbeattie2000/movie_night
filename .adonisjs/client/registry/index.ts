@@ -6,24 +6,6 @@ import type { ApiDefinition } from './tree.d.ts'
 const placeholder: any = {}
 
 const routes = {
-  'event_stream': {
-    methods: ["GET","HEAD"],
-    pattern: '/__transmit/events',
-    tokens: [{"old":"/__transmit/events","type":0,"val":"__transmit","end":""},{"old":"/__transmit/events","type":0,"val":"events","end":""}],
-    types: placeholder as Registry['event_stream']['types'],
-  },
-  'subscribe': {
-    methods: ["POST"],
-    pattern: '/__transmit/subscribe',
-    tokens: [{"old":"/__transmit/subscribe","type":0,"val":"__transmit","end":""},{"old":"/__transmit/subscribe","type":0,"val":"subscribe","end":""}],
-    types: placeholder as Registry['subscribe']['types'],
-  },
-  'unsubscribe': {
-    methods: ["POST"],
-    pattern: '/__transmit/unsubscribe',
-    tokens: [{"old":"/__transmit/unsubscribe","type":0,"val":"__transmit","end":""},{"old":"/__transmit/unsubscribe","type":0,"val":"unsubscribe","end":""}],
-    types: placeholder as Registry['unsubscribe']['types'],
-  },
   'login.create': {
     methods: ["GET","HEAD"],
     pattern: '/login',
@@ -89,18 +71,6 @@ const routes = {
     pattern: '/match/lobby',
     tokens: [{"old":"/match/lobby","type":0,"val":"match","end":""},{"old":"/match/lobby","type":0,"val":"lobby","end":""}],
     types: placeholder as Registry['matches.lobby']['types'],
-  },
-  'matches.ready': {
-    methods: ["POST"],
-    pattern: '/match/ready',
-    tokens: [{"old":"/match/ready","type":0,"val":"match","end":""},{"old":"/match/ready","type":0,"val":"ready","end":""}],
-    types: placeholder as Registry['matches.ready']['types'],
-  },
-  'matches.result': {
-    methods: ["GET","HEAD"],
-    pattern: '/match/result',
-    tokens: [{"old":"/match/result","type":0,"val":"match","end":""},{"old":"/match/result","type":0,"val":"result","end":""}],
-    types: placeholder as Registry['matches.result']['types'],
   },
   'matches.cancel': {
     methods: ["POST"],

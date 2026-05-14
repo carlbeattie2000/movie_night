@@ -2,9 +2,6 @@
 import type { routes } from './index.ts'
 
 export interface ApiDefinition {
-  eventStream: typeof routes['event_stream']
-  subscribe: typeof routes['subscribe']
-  unsubscribe: typeof routes['unsubscribe']
   login: {
     create: typeof routes['login.create']
     store: typeof routes['login.store']
@@ -29,8 +26,6 @@ export interface ApiDefinition {
   }
   matches: {
     lobby: typeof routes['matches.lobby']
-    ready: typeof routes['matches.ready']
-    result: typeof routes['matches.result']
     cancel: typeof routes['matches.cancel']
   }
   selects: {
