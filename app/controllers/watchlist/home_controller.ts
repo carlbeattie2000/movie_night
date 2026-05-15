@@ -6,6 +6,7 @@ import { WatchlistService } from '#services/watchlist_service'
 import GenreTransformer from '../../transformers/genre_transformer.ts'
 import MovieTransformer from '../../transformers/movie_transformer.ts'
 import UserTransformer from '#transformers/user_transformer'
+import WatchlistItemTransformer from '#transformers/watchlist_item_transformer'
 
 @inject()
 export default class HomeController {
@@ -35,9 +36,7 @@ export default class HomeController {
       otherUnwatched: MovieTransformer.transform(otherUnwatched),
       other: UserTransformer.transform(otherUser),
       genres: GenreTransformer.transform(genres),
-      combinedWatched: MovieTransformer.transform(
-        combinedWatchedList.map((watchList) => watchList.movie)
-      ),
+      combinedWatched: WatchlistItemTransformer.transform(combinedWatchedList),
     })
   }
 }

@@ -10,6 +10,7 @@ import type GenreTransformer from '#transformers/genre_transformer'
 import type MovieResultTransformer from '#transformers/movie_result_transformer'
 import type MovieTransformer from '#transformers/movie_transformer'
 import type UserTransformer from '#transformers/user_transformer'
+import type WatchlistItemTransformer from '#transformers/watchlist_item_transformer'
 import type InertiaMiddleware from '#middleware/inertia_middleware'
 
 export namespace Data {
@@ -28,6 +29,10 @@ export namespace Data {
   export type User = InferData<UserTransformer>
   export namespace User {
     export type Variants = InferVariants<UserTransformer>
+  }
+  export type WatchlistItem = InferData<WatchlistItemTransformer>
+  export namespace WatchlistItem {
+    export type Variants = InferVariants<WatchlistItemTransformer>
   }
   export type SharedProps = InferSharedProps<InertiaMiddleware>
 }
