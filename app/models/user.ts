@@ -12,4 +12,10 @@ export default class User extends compose(UserSchema, withAuthFinder(hash)) {
     pivotColumns: ['watched', 'last_watched'],
   })
   declare watchlist_items: ManyToMany<typeof Movie>
+
+  @manyToMany(() => Movie, {
+    pivotTable: 'ratings',
+    pivotColumns: ['rating'],
+  })
+  declare ratings: ManyToMany<typeof Movie>
 }

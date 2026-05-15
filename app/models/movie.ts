@@ -15,4 +15,10 @@ export default class Movie extends MovieSchema {
     pivotTable: 'movie_genres',
   })
   declare genres: ManyToMany<typeof Genre>
+
+  @manyToMany(() => User, {
+    pivotTable: 'ratings',
+    pivotColumns: ['rating'],
+  })
+  declare ratedBy: ManyToMany<typeof User>
 }
