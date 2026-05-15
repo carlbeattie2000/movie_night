@@ -59,6 +59,17 @@ export class MovieSchema extends BaseModel {
   declare voteAverage: number
 }
 
+export class RatingSchema extends BaseModel {
+  static $columns = ['movieId', 'rating', 'userId'] as const
+  $columns = RatingSchema.$columns
+  @column({ isPrimary: true })
+  declare movieId: number
+  @column()
+  declare rating: number | null
+  @column()
+  declare userId: number
+}
+
 export class UserSchema extends BaseModel {
   static $columns = ['createdAt', 'id', 'name', 'password'] as const
   $columns = UserSchema.$columns

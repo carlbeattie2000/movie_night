@@ -59,6 +59,7 @@ export default defineConfig({
     () => import('@adonisjs/cors/cors_provider'),
     () => import('@adonisjs/inertia/inertia_provider'),
     () => import('#providers/socket_provider'),
+    () => import('#providers/api_provider'),
   ],
 
   /*

@@ -15,4 +15,5 @@ export const controllers = {
     Api: () => import('#controllers/watchlist/api_controller'),
     Home: () => import('#controllers/watchlist/home_controller'),
   },
+  Ratings: () => import('#controllers/ratings_controller'),
 }

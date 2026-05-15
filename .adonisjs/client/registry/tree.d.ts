@@ -20,6 +20,10 @@ export interface ApiDefinition {
     api: {
       fetch: typeof routes['movies.api.fetch']
     }
+    ratings: {
+      getNextToRate: typeof routes['movies.ratings.get_next_to_rate']
+      rateMovie: typeof routes['movies.ratings.rate_movie']
+    }
     showSearch: typeof routes['movies.show_search']
     searchResults: typeof routes['movies.search_results']
     browse: typeof routes['movies.browse']

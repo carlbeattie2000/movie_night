@@ -2,6 +2,7 @@ import { Data } from '@generated/data'
 import Button from './button'
 import React, { useState } from 'react'
 import { Form } from '@adonisjs/inertia/react'
+import Rate from './rate'
 
 type MovieCardProps = {
   id?: number
@@ -21,6 +22,7 @@ export default function MovieCard({
   voteAverage,
   lastWatched,
   posterUrl,
+  ratedBy,
   selectBtn,
   addBtn,
   removeBtn,
@@ -71,11 +73,23 @@ export default function MovieCard({
         <p className="text-zinc-900 text-md font-semibold leading-tight line-clamp-1">{title}</p>
         {releaseDate && <p className="text-zinc-500 text-xs mt-0.5">{releaseDate}</p>}
         {voteAverage && <p className="text-zinc-500 text-xs mt-0.5">★ {voteAverage.toFixed(1)}</p>}
-        {lastWatched && lastWatched >= 0 && (
+        {lastWatched !== undefined && (
           <p className="text-zinc-500 text-xs mt-0.5">
             Last watched: {lastWatched === 0 ? 'Today' : `${lastWatched} days ago`}
           </p>
         )}
+
+        {ratedBy &&
+          ratedBy.map((rate) => {
+            return (
+              <div className='flex flex-col gap-2'>
+                <p className="text-zinc-500 text-xs mt-0.5">
+                  {rate.name}
+                </p>
+                <Rate maxStars={10} rated={rate.rating} />
+              </div>
+            )
+          })}
 
         {addBtn && id && (
           <Button text={addStatus} variant={addVariant} onClick={() => onAddMovie(id)} />

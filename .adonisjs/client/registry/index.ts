@@ -48,6 +48,18 @@ const routes = {
     tokens: [{"old":"/api/movies/:movieId","type":0,"val":"api","end":""},{"old":"/api/movies/:movieId","type":0,"val":"movies","end":""},{"old":"/api/movies/:movieId","type":1,"val":"movieId","end":""}],
     types: placeholder as Registry['movies.api.fetch']['types'],
   },
+  'movies.ratings.get_next_to_rate': {
+    methods: ["POST"],
+    pattern: '/api/rating/next',
+    tokens: [{"old":"/api/rating/next","type":0,"val":"api","end":""},{"old":"/api/rating/next","type":0,"val":"rating","end":""},{"old":"/api/rating/next","type":0,"val":"next","end":""}],
+    types: placeholder as Registry['movies.ratings.get_next_to_rate']['types'],
+  },
+  'movies.ratings.rate_movie': {
+    methods: ["POST"],
+    pattern: '/api/rating/rate',
+    tokens: [{"old":"/api/rating/rate","type":0,"val":"api","end":""},{"old":"/api/rating/rate","type":0,"val":"rating","end":""},{"old":"/api/rating/rate","type":0,"val":"rate","end":""}],
+    types: placeholder as Registry['movies.ratings.rate_movie']['types'],
+  },
   'movies.show_search': {
     methods: ["GET","HEAD"],
     pattern: '/movies/search',

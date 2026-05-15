@@ -4,17 +4,25 @@ import { GenreSidebar } from '~/components/genre_sidebar'
 import { MobileGenreScrollList } from '~/components/mobile_genre_scroll_list'
 import MovieCard from '~/components/movie_card'
 import Popcorn from '~/components/popcorn'
+import RateMovie from '~/components/rate_movie'
 import { InertiaProps } from '~/types'
 
 type PageProps = InertiaProps<{
   genres: Data.Genre[]
   selfUnwatched: Data.Movie[]
   otherUnwatched: Data.Movie[]
-  combinedWatched: Data.Movie[]
+  combinedWatched: Data.WatchlistItem[]
   other: Data.User
 }>
 
-export default function Home({ genres, selfUnwatched, otherUnwatched, user, other }: PageProps) {
+export default function Home({
+  genres,
+  selfUnwatched,
+  otherUnwatched,
+  combinedWatched,
+  user,
+  other,
+}: PageProps) {
   const [usersUnwatched, setUsersUnwatched] = useState<Data.Movie[]>(selfUnwatched)
   const [localSearchInput, setLocalSearchInput] = useState<string>('')
 
@@ -52,7 +60,7 @@ export default function Home({ genres, selfUnwatched, otherUnwatched, user, othe
 
   return (
     <>
-      <div className="min-h-screen bg-white">
+      <div className="relative min-h-screen bg-white">
         <Popcorn amount={256} />
 
         <div className="max-w-7xl mx-auto px-4 py-6 relative z-20">
@@ -99,6 +107,22 @@ export default function Home({ genres, selfUnwatched, otherUnwatched, user, othe
               </div>
             </div>
           </div>
+          <div className="md:pl-8 md:flex-1">
+            <h2 className="text-zinc-900 text-lg font-semibold mb-4">Watched</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+              {combinedWatched.map((watchlistItem) => {
+                return (
+                  <MovieCard
+                    {...watchlistItem.movie}
+                    lastWatched={watchlistItem.daysSinceWatched}
+                    selectBtn={watchlistItem.userId === user?.id}
+                  />
+                )
+              })}
+            </div>
+          </div>
+
+          <RateMovie />
         </div>
       </div>
     </>

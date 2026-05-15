@@ -75,6 +75,11 @@ export class WatchlistService {
   }
 
   async combinedWatchedList(): Promise<WatchlistItem[]> {
-    return await WatchlistItem.query().where('watched', true).preload('movie')
+    return await WatchlistItem.query()
+      .where('watched', true)
+      .orderBy('lastWatched', 'desc')
+      .preload('movie', (query) => {
+        query.preload('ratedBy')
+      })
   }
 }
