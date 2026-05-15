@@ -41,6 +41,14 @@ router
 
     router
       .group(() => {
+        router.post('/next', [controllers.Ratings, 'getNextToRate'])
+        router.post('/rate', [controllers.Ratings, 'rateMovie'])
+      })
+      .prefix('api/rating')
+      .as('movies')
+
+    router
+      .group(() => {
         router.get('search', [controllers.movies.Movies, 'showSearch'])
         router.post('search', [controllers.movies.Movies, 'searchResults'])
 

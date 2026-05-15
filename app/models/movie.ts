@@ -9,7 +9,7 @@ export default class Movie extends MovieSchema {
     pivotTable: 'watchlist_items',
     pivotColumns: ['watched', 'last_watched', 'created_at'],
   })
-  declare watchlist: ManyToMany<typeof User>
+  declare watchlistedBy: ManyToMany<typeof User>
 
   @manyToMany(() => Genre, {
     pivotTable: 'movie_genres',

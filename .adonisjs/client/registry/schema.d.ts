@@ -91,6 +91,30 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/movies/api_controller').default['fetch']>>>
     }
   }
+  'movies.ratings.get_next_to_rate': {
+    methods: ["POST"]
+    pattern: '/api/rating/next'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/ratings_controller').default['getNextToRate']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/ratings_controller').default['getNextToRate']>>>
+    }
+  }
+  'movies.ratings.rate_movie': {
+    methods: ["POST"]
+    pattern: '/api/rating/rate'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/ratings_controller').default['rateMovie']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/ratings_controller').default['rateMovie']>>>
+    }
+  }
   'movies.show_search': {
     methods: ["GET","HEAD"]
     pattern: '/movies/search'
