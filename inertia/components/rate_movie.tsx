@@ -55,8 +55,8 @@ export default function RateMovie() {
   return (
     <>
       <div className="fixed inset-0 bg-black/50" />
-      <div className="fixed bg-white shadow-2xl w-[90%] h-[70%] sm:w-[80%] sm:h-[50%] md:w-[15%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg overflow-hidden">
-        <img src={movie.posterUrl} alt="" className="h-[75%] sm:h-[65%] w-full object-cover" />
+      <div className="fixed bg-white shadow-2xl w-[90%] h-[90%] sm:w-[80%] sm:h-[50%] md:w-[15%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg overflow-hidden">
+        <img src={movie.posterUrl} alt="" className="h-[70%] sm:h-[65%] w-full object-cover" />
         <div className="flex flex-col gap-6 p-4">
           <h1 className="text-2xl">{movie.title}</h1>
           <div className="flex flex-col gap-2">
@@ -74,6 +74,7 @@ export default function RateMovie() {
                 e.preventDefault()
                 submitRateMovieRequest()
               }}
+              className="w-full"
             >
               <input type="hidden" value={rating} name="rating" />
               <input type="hidden" value={movie.id} name="movie_id" />
