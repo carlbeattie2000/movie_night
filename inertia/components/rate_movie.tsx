@@ -7,7 +7,13 @@ interface Movie {
   title: string
 }
 
-export default function RateMovie() {
+export default function RateMovie({
+  movieId,
+  onMovieRateRequest,
+}: {
+  movieId: number | null
+  onMovieRateRequest?: () => void
+}) {
   const [movie, setMovie] = useState<Movie | null>(null)
   const [rating, setRating] = useState<number>(0)
 
@@ -30,12 +36,24 @@ export default function RateMovie() {
     if (req.ok) {
       setMovie(null)
     }
+
+    if (onMovieRateRequest) {
+      onMovieRateRequest()
+    }
   }
 
   useEffect(() => {
-    const getNextMovieToRate = async () => {
-      const req = await fetch('/api/rating/next', {
+    const getMovieToRate = async () => {
+      if (!movieId) return
+
+      const req = await fetch('/api/rating', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          movie_id: movieId,
+        }),
       })
 
       if (req.ok) {
@@ -45,8 +63,10 @@ export default function RateMovie() {
       }
     }
 
-    getNextMovieToRate()
-  }, [])
+    if (movieId) {
+      getMovieToRate()
+    }
+  }, [movieId])
 
   if (!movie) {
     return
@@ -58,7 +78,7 @@ export default function RateMovie() {
       <div className="fixed bg-white shadow-2xl w-[90%] h-[70%] sm:w-[80%] sm:h-[50%] md:w-[15%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg overflow-hidden">
         <img src={movie.posterUrl} alt="" className="h-[40%] sm:h-[65%] w-full object-cover" />
         <div className="flex flex-col gap-6 p-4">
-          <h1 className="text-2xl">{movie.title}</h1>
+          <h1 className="text-2xl line-clamp-1">{movie.title}</h1>
           <div className="flex flex-col gap-2">
             <p className="text-zinc-500 text-xs mt-0.5">What do you rate this film?</p>
             <Rate
@@ -83,7 +103,10 @@ export default function RateMovie() {
                 Rate
               </button>
             </form>
-            <button className="w-full py-2 rounded-lg bg-red-900 text-white text-md font-medium hover:bg-zinc-700 transition-colors" onClick={() => setMovie(null)}>
+            <button
+              className="w-full py-2 rounded-lg bg-red-900 text-white text-md font-medium hover:bg-zinc-700 transition-colors"
+              onClick={() => setMovie(null)}
+            >
               Not Watched
             </button>
           </div>

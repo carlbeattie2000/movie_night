@@ -28,7 +28,7 @@ export default function MovieCard({
   addBtn,
   removeBtn,
   onRemove,
-  onClick
+  onClick,
 }: MovieCardProps) {
   const [addStatus, setAddStatus] = useState<string>('Add')
   const [addVariant, setAddVariant] = useState<'normal' | 'success' | 'danger'>('normal')
@@ -67,7 +67,16 @@ export default function MovieCard({
     }
   }
   return (
-    <div className="flex flex-col shadow-2xl rounded-b bg-white" id="movie_{{ id }}" key={id} onClick={onClick}>
+    <div
+      className="flex flex-col shadow-2xl rounded-b bg-white"
+      id="movie_{{ id }}"
+      key={id}
+      onClick={() => {
+        if (onClick) {
+          onClick()
+        }
+      }}
+    >
       <div className="aspect-2/3 overflow-hidden">
         <img src={posterUrl} alt={title} className="rounded-t w-full h-full object-cover" />
       </div>

@@ -41,6 +41,7 @@ router
 
     router
       .group(() => {
+        router.post('/', [controllers.Ratings, 'getMovieToRate'])
         router.post('/next', [controllers.Ratings, 'getNextToRate'])
         router.post('/rate', [controllers.Ratings, 'rateMovie'])
       })

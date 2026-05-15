@@ -21,6 +21,7 @@ export interface ApiDefinition {
       fetch: typeof routes['movies.api.fetch']
     }
     ratings: {
+      getMovieToRate: typeof routes['movies.ratings.get_movie_to_rate']
       getNextToRate: typeof routes['movies.ratings.get_next_to_rate']
       rateMovie: typeof routes['movies.ratings.rate_movie']
     }

@@ -10,7 +10,32 @@ type RateMovieResult =
   | { status: 'error'; message: string }
 
 export class RatingService {
-  async getMovieToRate(userId: number): Promise<RateMovieResult> {
+  async getMovieToRate(movieId: number, userId: number): Promise<RateMovieResult> {
+    const watchedMovieResult = await MoviePickedResult.query()
+      .where('movieId', movieId)
+      .preload('movie')
+      .first()
+
+    if (!watchedMovieResult) {
+      return { status: 'error', message: 'Movie has not been watched' }
+    }
+
+    const userRatedResult = await Rating.query()
+      .where('userId', userId)
+      .andWhere('movieId', watchedMovieResult.movieId)
+      .first()
+
+    if (userRatedResult) {
+      return { status: 'error', message: 'User already this movie' }
+    }
+
+    return {
+      status: 'success',
+      movie: watchedMovieResult.movie,
+    }
+  }
+
+  async getNextMovieToRate(userId: number): Promise<RateMovieResult> {
     const lastWatchedMovie = await MoviePickedResult.query()
       .orderBy('createdAt', 'desc')
       .preload('movie')

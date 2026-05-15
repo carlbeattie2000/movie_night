@@ -10,7 +10,22 @@ export default class RatingsController {
   async getNextToRate({ auth, response, serialize }: HttpContext) {
     const user = auth.getUserOrFail()
 
-    const movieToRateResult = await this.ratingService.getMovieToRate(user.id)
+    const movieToRateResult = await this.ratingService.getNextMovieToRate(user.id)
+
+    if (movieToRateResult.status === 'error') {
+      return response.badRequest(movieToRateResult.message)
+    }
+
+    return serialize(MovieTransformer.transform(movieToRateResult.movie))
+  }
+
+  async getMovieToRate({ request, auth, response, serialize }: HttpContext) {
+    const user = auth.getUserOrFail()
+
+    const movieToRateResult = await this.ratingService.getMovieToRate(
+      request.input('movie_id'),
+      user.id
+    )
 
     if (movieToRateResult.status === 'error') {
       return response.badRequest(movieToRateResult.message)

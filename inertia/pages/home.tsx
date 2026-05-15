@@ -25,6 +25,7 @@ export default function Home({
 }: PageProps) {
   const [usersUnwatched, setUsersUnwatched] = useState<Data.Movie[]>(selfUnwatched)
   const [localSearchInput, setLocalSearchInput] = useState<string>('')
+  const [movieToRateId, setMovieToRateId] = useState<number | null>(null)
 
   const onRemoveMovie = async (movieId: number) => {
     const res = await fetch('/api/watchlist/remove', {
@@ -116,13 +117,21 @@ export default function Home({
                     {...watchlistItem.movie}
                     lastWatched={watchlistItem.daysSinceWatched}
                     selectBtn={watchlistItem.userId === user?.id}
+                    onClick={() => {
+                      setMovieToRateId(watchlistItem.movie.id)
+                    }}
                   />
                 )
               })}
             </div>
           </div>
 
-          <RateMovie />
+          <RateMovie
+            movieId={movieToRateId}
+            onMovieRateRequest={() => {
+              setMovieToRateId(null)
+            }}
+          />
         </div>
       </div>
     </>

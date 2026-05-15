@@ -10,22 +10,17 @@ export default function Rate({ maxStars, rated, onRatingSet }: RateProps) {
   const [selected, setSelected] = useState<number[]>(new Array(maxStars).fill(0))
 
   useEffect(() => {
-    const rating = selected.reduce((prev, next) => {
-      return next ? prev + 1 : prev
-    }, 0)
-
-    if (onRatingSet) {
-      onRatingSet(rating)
+    if (rated !== undefined && rated !== null) {
+      setSelected(Array.from({ length: selected.length }, (_, i) => (i < rated ? 1 : 0)))
     }
+  }, [rated])
 
-    if (rated) {
-      setSelected(
-        selected.map((_, i) => {
-          return i < rated ? 1 : 0
-        })
-      )
-    }
-  }, [selected, rated])
+  useEffect(() => {
+    if (rated !== undefined && rated !== null) return // Don't call onRatingSet in display mode
+
+    const currentRating = selected.reduce((sum, star) => sum + (star ? 1 : 0), 0)
+    onRatingSet?.(currentRating)
+  }, [selected, rated, onRatingSet])
 
   function updateSelectedStars(clickedIndex: number) {
     if (rated) return
