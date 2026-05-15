@@ -11,9 +11,9 @@ export const controllers = {
     Movies: () => import('#controllers/movies/movies_controller'),
     Selects: () => import('#controllers/movies/selects_controller'),
   },
+  Ratings: () => import('#controllers/ratings_controller'),
   watchlist: {
     Api: () => import('#controllers/watchlist/api_controller'),
     Home: () => import('#controllers/watchlist/home_controller'),
   },
-  Ratings: () => import('#controllers/ratings_controller'),
 }
