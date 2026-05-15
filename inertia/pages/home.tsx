@@ -107,7 +107,7 @@ export default function Home({
               </div>
             </div>
           </div>
-          <div className="md:pl-8 md:flex-1">
+          <div className="md:pl-8 md:flex-1 mt-8">
             <h2 className="text-zinc-900 text-lg font-semibold mb-4">Watched</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
               {combinedWatched.map((watchlistItem) => {

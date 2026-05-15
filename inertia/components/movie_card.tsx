@@ -13,6 +13,7 @@ type MovieCardProps = {
   addBtn?: boolean
   removeBtn?: boolean
   onRemove?: React.MouseEventHandler<HTMLButtonElement>
+  onClick?: () => void
 } & Partial<Data.Movie>
 
 export default function MovieCard({
@@ -27,6 +28,7 @@ export default function MovieCard({
   addBtn,
   removeBtn,
   onRemove,
+  onClick
 }: MovieCardProps) {
   const [addStatus, setAddStatus] = useState<string>('Add')
   const [addVariant, setAddVariant] = useState<'normal' | 'success' | 'danger'>('normal')
@@ -65,7 +67,7 @@ export default function MovieCard({
     }
   }
   return (
-    <div className="flex flex-col shadow-2xl rounded-b bg-white" id="movie_{{ id }}" key={id}>
+    <div className="flex flex-col shadow-2xl rounded-b bg-white" id="movie_{{ id }}" key={id} onClick={onClick}>
       <div className="aspect-2/3 overflow-hidden">
         <img src={posterUrl} alt={title} className="rounded-t w-full h-full object-cover" />
       </div>
@@ -82,10 +84,8 @@ export default function MovieCard({
         {ratedBy &&
           ratedBy.map((rate) => {
             return (
-              <div className='flex flex-col gap-2'>
-                <p className="text-zinc-500 text-xs mt-0.5">
-                  {rate.name}
-                </p>
+              <div className="flex flex-col gap-2">
+                <p className="text-zinc-500 text-xs mt-0.5">{rate.name}</p>
                 <Rate maxStars={10} rated={rate.rating} />
               </div>
             )
