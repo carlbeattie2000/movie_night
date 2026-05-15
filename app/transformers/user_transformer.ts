@@ -3,6 +3,9 @@ import type User from '#models/user'
 
 export default class UserTransformer extends BaseTransformer<User> {
   toObject() {
-    return this.pick(this.resource, ['id', 'name'])
+    return {
+      ...this.pick(this.resource, ['id', 'name']),
+      rating: this.resource.$extras.pivot_rating,
+    }
   }
 }

@@ -4,7 +4,6 @@ import { GenreSidebar } from '~/components/genre_sidebar'
 import { MobileGenreScrollList } from '~/components/mobile_genre_scroll_list'
 import MovieCard from '~/components/movie_card'
 import Popcorn from '~/components/popcorn'
-import Rate from '~/components/rate'
 import RateMovie from '~/components/rate_movie'
 import { InertiaProps } from '~/types'
 

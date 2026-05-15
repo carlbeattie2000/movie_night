@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react'
 
 interface RateProps {
   maxStars: number
-  onRatingSet: (rating: number) => void
+  rated?: number
+  onRatingSet?: (rating: number) => void
 }
 
-export default function Rate({ maxStars, onRatingSet }: RateProps) {
+export default function Rate({ maxStars, rated, onRatingSet }: RateProps) {
   const [selected, setSelected] = useState<number[]>(new Array(maxStars).fill(0))
 
   useEffect(() => {
@@ -13,10 +14,22 @@ export default function Rate({ maxStars, onRatingSet }: RateProps) {
       return next ? prev + 1 : prev
     }, 0)
 
-    onRatingSet(rating)
-  }, [selected])
+    if (onRatingSet) {
+      onRatingSet(rating)
+    }
+
+    if (rated) {
+      setSelected(
+        selected.map((_, i) => {
+          return i < rated ? 1 : 0
+        })
+      )
+    }
+  }, [selected, rated])
 
   function updateSelectedStars(clickedIndex: number) {
+    if (rated) return
+
     setSelected(
       selected.map((_, i) => {
         return i <= clickedIndex ? 1 : 0

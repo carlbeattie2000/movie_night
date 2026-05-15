@@ -6,7 +6,7 @@ export default class WatchlistItemTransformer extends BaseTransformer<WatchlistI
   toObject() {
     return {
       ...this.pick(this.resource, ['userId']),
-      movie: MovieTransformer.transform(this.resource.movie),
+      movie: MovieTransformer.transform(this.resource.movie).depth(2),
       daysSinceWatched: this.resource.lastWatched
         ? Math.round(Math.abs(this.resource.lastWatched.diffNow('days').days))
         : -1,

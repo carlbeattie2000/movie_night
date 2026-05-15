@@ -78,6 +78,8 @@ export class WatchlistService {
     return await WatchlistItem.query()
       .where('watched', true)
       .orderBy('lastWatched', 'desc')
-      .preload('movie')
+      .preload('movie', (query) => {
+        query.preload('ratedBy')
+      })
   }
 }
