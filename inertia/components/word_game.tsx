@@ -28,7 +28,7 @@ export default function WordGame({
   const [started, setStarted] = useState<boolean>(false)
   const [timeLeft, setTimeLeft] = useState<number>(0)
 
-  const [words, setWords] = useState<string[]>([])
+  const [words, setWords] = useState<Set<string>>(new Set())
   const [usedWords, setUsedWords] = useState<string[]>([])
 
   const [chars, setChars] = useState<Record<number, string>>({})
@@ -67,7 +67,7 @@ export default function WordGame({
       .join('')
       .toLowerCase()
 
-    if (words.includes(currentWord) && !usedWords.includes(currentWord)) {
+    if (words.has(currentWord) && !usedWordsRef.current.includes(currentWord)) {
       updateUsedWords([...usedWords, currentWord])
       setUsedChars([])
     }
@@ -82,7 +82,7 @@ export default function WordGame({
 
     socket.on('word_game__started', (gameData: GameData) => {
       setChars(Object.fromEntries(gameData.chars.map((char, i) => [i, char])))
-      setWords(gameData.words)
+      setWords(new Set(gameData.words))
       setStarted(true)
       setTimeLeft(GAME_LENGTH_SECONDS)
     })
