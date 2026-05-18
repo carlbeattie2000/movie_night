@@ -5,7 +5,7 @@ import app from '@adonisjs/core/services/app'
 
 const WORDS = readFileSync(join(app.makePath('resources/data/words.txt')), 'utf-8').split('\n')
 const VOWELS = 'aeiou'.split('')
-const CHARS = 'abcdefghijklmnopqrstuvwxyz'.split('').filter((char) => !VOWELS.includes(char))
+const CHARS = 'abcdefghiklmnoprstuvwy'.split('').filter((char) => !VOWELS.includes(char))
 
 const MIN_VALID_WORDS_BEFORE_START = 60
 
