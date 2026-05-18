@@ -20,12 +20,12 @@ type Result = {
 type WordGameResponse =
   | 'user_not_registered'
   | 'user_already_submited'
-  | 'not_all_players_submited'
-  | 'could_not_find_winner'
   | 'could_not_start_game'
   | null
 
-type FindWinnerResponse = { error: WordGameResponse } | { error: null; winner: number }
+type FindWinnerResponse =
+  | { error: 'not_all_players_submited' | 'could_not_find_winner' }
+  | { error: null; winner: number }
 
 type StartGameResponse = { error: 'could_not_start_game' } | { error: null; gameData: GameData }
 
@@ -138,6 +138,7 @@ export class WordGame extends Game {
     }
 
     this.#winner = userId
+    this.finish()
 
     return { error: null, winner: userId }
   }

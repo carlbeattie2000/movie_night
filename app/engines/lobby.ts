@@ -8,6 +8,7 @@ const BASE_PROBABILITY = 100
 type ConnectedUser = {
   movieId: number
   probability: number
+  ready: boolean
 }
 
 type Winner = {
@@ -20,14 +21,14 @@ export class Lobby {
   #id: string | null
   #connectedUsers: Map<number, ConnectedUser>
   #totalProbability: number
-  #pickedMovieId: number | null
+  #result: Winner | null
   #startedAt: DateTime | null
 
   constructor() {
     this.#id = null
     this.#connectedUsers = new Map()
     this.#totalProbability = 0
-    this.#pickedMovieId = null
+    this.#result = null
     this.#startedAt = null
   }
 
@@ -38,7 +39,7 @@ export class Lobby {
   public isOpen(): boolean {
     const expired =
       this.#startedAt && Math.abs(this.#startedAt.diffNow('minutes').minutes) >= STALE_AFTER_MINUTES
-    const invalid = this.#id === null || this.#pickedMovieId !== null
+    const invalid = this.#id === null || this.#result !== null
 
     return !expired && !invalid
   }
@@ -47,7 +48,7 @@ export class Lobby {
     this.#id = randomUUID()
     this.#startedAt = DateTime.now()
     this.#connectedUsers.clear()
-    this.#pickedMovieId = null
+    this.#result = null
   }
 
   #normalizeUsersProbabilities() {
@@ -82,13 +83,39 @@ export class Lobby {
     this.#connectedUsers.set(userId, {
       movieId,
       probability: BASE_PROBABILITY,
+      ready: false,
     })
 
     return true
   }
 
+  public disconnect(userId: number): boolean {
+    if (this.#connectedUsers.has(userId)) {
+      this.#connectedUsers.delete(userId)
+      return true
+    }
+    return false
+  }
+
+  public readyUp(userId: number): boolean {
+    const connectedUser = this.#connectedUsers.get(userId)
+
+    if (connectedUser && this.isOpen()) {
+      connectedUser.ready = true
+      return true
+    }
+    return false
+  }
+
+  #finished(): boolean {
+    return this.#result !== null
+  }
+
   #canStart(): boolean {
-    return this.isOpen() && Object.values(this.#connectedUsers).length >= MIN_PLAYERS_TO_START
+    const valid = this.isOpen() && this.#connectedUsers.size >= MIN_PLAYERS_TO_START
+    const playersReady = this.#connectedUsers.values().every((val) => val.ready)
+
+    return valid && playersReady
   }
 
   #roll(): Winner {
@@ -107,15 +134,23 @@ export class Lobby {
     throw new Error('Unable to find a winner')
   }
 
+  public results(): Winner | null {
+    return this.#result
+  }
+
   public start(): Winner | null {
+    if (this.#finished()) {
+      return this.#result
+    }
+
     if (!this.#canStart()) {
       return null
     }
 
     this.#normalizeUsersProbabilities()
 
-    const winner = this.#roll()
+    this.#result = this.#roll()
 
-    return winner
+    return this.#result
   }
 }

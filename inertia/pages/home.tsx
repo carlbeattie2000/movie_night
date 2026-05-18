@@ -134,7 +134,7 @@ export default function Home({
             }}
           />
 
-          <WordGame />
+          <WordGame user={user} />
         </div>
       </div>
     </>

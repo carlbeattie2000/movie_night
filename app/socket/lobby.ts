@@ -1,71 +1,58 @@
 import Movie from '#models/movie'
-import gameRooms from '#services/game_rooms_service'
+import User from '#models/user'
 import { MatchService } from '#services/match_service'
 import { getIO } from '#services/socket_service'
+import { lobbyStore } from '#stores/index'
 import { tmdb } from '../utils/tmdb.ts'
 
 const io = getIO()
 
-function lobby() {
+function lobbySocket() {
   if (!io) return
 
   const matchesService = new MatchService()
 
-  const connectedUsers = new Set<number>()
-  let lastMovieId: number | null = null
-
   io.on('connection', (socket) => {
     socket.on('ready', async (userId: number) => {
-      connectedUsers.add(userId)
+      lobbyStore.readyUp(userId)
 
-      const room = gameRooms.get('main')
+      const cachedResult = lobbyStore.results()
+      const result = lobbyStore.start()
 
-      if (connectedUsers.size === 2) {
-        if (room && room.valid() && room.ready()) {
-          lastMovieId = room.pick()
-
-          const movie = await Movie.findOrFail(lastMovieId)
-
-          if (movie) {
-            await matchesService.markMovieAsWatched(movie.id)
-          }
-
-          const providers = await tmdb.providers(movie.tmdbId)
-
-          if (providers.status === 'success') {
-            const { results } = providers.result
-            return io.sockets.emit('result', movie, results?.GB?.flatrate)
-          }
-
-          return io.sockets.emit('result', movie)
-        }
-
-        if (!room && lastMovieId) {
-          const movie = await Movie.find(lastMovieId)
-          io.sockets.emit('result', movie)
-          return
-        }
-
-        return io.sockets.emit('invalid_room')
+      if (!result) {
+        return
       }
 
-      if (room?.expired() && lastMovieId) {
-        const movie = await Movie.findOrFail(lastMovieId)
+      const winningUser = await User.findOrFail(result.userId)
+      const movie = await Movie.findOrFail(result.movieId)
+
+      if (movie) {
+        if (!cachedResult) {
+          await matchesService.markMovieAsWatched(movie.id)
+        }
         const providers = await tmdb.providers(movie.tmdbId)
 
         if (providers.status === 'success') {
           const { results } = providers.result
-          return io.sockets.emit('result', movie, results?.GB?.flatrate)
+          return io.sockets.emit('result', {
+            movie: { ...movie.toJSON(), providers: results?.GB?.flatrate },
+            winner: winningUser.name,
+            probability: result.probability,
+          })
         }
 
-        return io.sockets.emit('result', movie)
+        return io.sockets.emit('result', {
+          movie,
+          winner: winningUser.name,
+          probability: result.probability,
+        })
       }
     })
 
     socket.on('unready', (userId: number) => {
-      connectedUsers.delete(userId)
+      lobbyStore.disconnect(userId)
     })
   })
 }
 
-lobby()
+lobbySocket()

@@ -35,7 +35,8 @@
     "#tests/*": "./tests/*.js",
     "#start/*": "./start/*.js",
     "#config/*": "./config/*.js",
-    "#socket/*": "./app/socket/*.js"
+    "#socket/*": "./app/socket/*.js",
+    "#stores/*": "./app/stores/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^8.4.0",
@@ -60,7 +61,7 @@
     "prettier": "^3.8.2",
     "tailwindcss": "^4.3.0",
     "typescript": "~6.0.2",
-    "vite": "^7.3.1",
+    "vite": "^7.3.3",
     "youch": "^4.1.1"
   },
   "dependencies": {

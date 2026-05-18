@@ -63,8 +63,20 @@ export default class Game {
     return this.#finishedAt || Math.abs(this.minutesSinceStarted()) > GAME_EXPIRE_AFTER_MINUTES
   }
 
-  public start(): boolean {
+  public canStart(): boolean {
     if (this.#users.length < this.#minUsersForGameStart) {
+      return false
+    }
+
+    if (this.#startedAt !== null || this.#finishedAt !== null) {
+      return false
+    }
+
+    return true
+  }
+
+  public start(): boolean {
+    if (!this.canStart()) {
       return false
     }
     this.#startedAt = DateTime.now()

@@ -1,24 +1,46 @@
-import { useEffect, useState } from 'react'
+import { Data } from '@generated/data'
+import { useEffect, useRef, useState } from 'react'
+import { io, type Socket } from 'socket.io-client'
 
 const GAME_LENGTH = 45
 
-export default function WordGame() {
+type GameData = {
+  chars: string[]
+  words: string[]
+}
+
+export default function WordGame({
+  user,
+  open,
+  onCloseClick,
+}: {
+  user?: Data.User
+  open: boolean
+  onCloseClick: () => void
+}) {
+  if (!open) {
+    return
+  }
+
+  const [winner, setWinner] = useState<number | null>(null)
+  const [ioInstance, setIoInstance] = useState<Socket | null>(null)
+
   const [started, setStarted] = useState<boolean>(false)
   const [timeLeft, setTimeLeft] = useState<number>(0)
 
   const [words, setWords] = useState<string[]>([])
   const [usedWords, setUsedWords] = useState<string[]>([])
 
-  const [chars, _] = useState<Record<number, string>>({
-    0: 'a',
-    1: 'b',
-    2: 'c',
-    3: 'r',
-    4: 'l',
-    5: 'd',
-  })
+  const [chars, setChars] = useState<Record<number, string>>({})
 
   const [usedChars, setUsedChars] = useState<number[]>([])
+
+  const usedWordsRef = useRef<string[]>([])
+
+  const updateUsedWords = (words: string[]) => {
+    usedWordsRef.current = words
+    setUsedWords(words)
+  }
 
   useEffect(() => {
     if (!started) return
@@ -27,6 +49,9 @@ export default function WordGame() {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(interval)
+          if (ioInstance) {
+            ioInstance.emit('word_game__result', user?.id, usedWordsRef.current)
+          }
           return 0
         }
         return prev - 1
@@ -43,7 +68,7 @@ export default function WordGame() {
       .toLowerCase()
 
     if (words.includes(currentWord) && !usedWords.includes(currentWord)) {
-      setUsedWords([...usedWords, currentWord])
+      updateUsedWords([...usedWords, currentWord])
       setUsedChars([])
     }
   }
@@ -52,18 +77,59 @@ export default function WordGame() {
     checkWordMatchesWord()
   }, [usedChars])
 
+  useEffect(() => {
+    const socket = io()
+
+    socket.on('word_game__started', (gameData: GameData) => {
+      setChars(Object.fromEntries(gameData.chars.map((char, i) => [i, char])))
+      setWords(gameData.words)
+      setStarted(true)
+      setTimeLeft(GAME_LENGTH)
+    })
+
+    socket.on('word_game__winner', (winnerId: number) => {
+      setStarted(false)
+      setWinner(winnerId)
+    })
+
+    setIoInstance(socket)
+  }, [])
+
+  function onStart() {
+    if (ioInstance) {
+      ioInstance.emit('word_game__start', user?.id)
+    }
+  }
+
+  if (winner !== null) {
+    return (
+      <>
+        <div className="fixed inset-0 bg-black/50 z-50" />
+        <div className="fixed bg-white shadow-2xl w-[95%] h-[50%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg overflow-hidden z-50">
+          <div className="flex flex-col gap-6 h-full p-4 justify-center items-center">
+            <h1>{winner} </h1>
+            <p>WON</p>
+            <button
+              className="px-4 py-6 bg-red-400 hover:bg-red-200 text-white font-bold text-2xl w-[60%] rounded-sm"
+              onClick={onCloseClick}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </>
+    )
+  }
+
   if (!started) {
     return (
       <>
-        <div className="fixed inset-0 bg-black/50" />
-        <div className="fixed bg-white shadow-2xl w-[95%] h-[50%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg overflow-hidden">
+        <div className="fixed inset-0 bg-black/50 z-50" />
+        <div className="fixed bg-white shadow-2xl w-[95%] h-[50%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg overflow-hidden z-50">
           <div className="flex flex-col gap-6 h-full p-4 justify-center items-center">
             <button
               className="px-4 py-6 bg-green-400 hover:bg-green-200 text-white font-bold text-2xl w-[60%] rounded-sm"
-              onClick={() => {
-                setStarted(true)
-                setTimeLeft(GAME_LENGTH)
-              }}
+              onClick={onStart}
             >
               Start
             </button>
@@ -75,8 +141,8 @@ export default function WordGame() {
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/50" />
-      <div className="fixed bg-white shadow-2xl w-[95%] h-[50%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg overflow-hidden flex flex-col gap-12 items-center">
+      <div className="fixed inset-0 bg-black/50 z-50" />
+      <div className="fixed bg-white shadow-2xl w-[95%] h-[50%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg overflow-hidden flex flex-col gap-12 items-center z-50">
         <div className="flex flex-col gap-6 p-4 items-center">
           <h1 className="text-4xl line-clamp-1">Word Game</h1>
           <p className="text-2xl line-clamp-1">{timeLeft}</p>
