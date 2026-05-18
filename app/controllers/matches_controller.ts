@@ -27,7 +27,7 @@ export default class MatchesController {
 
     if (
       watchListItem.firstWatchedAt === null ||
-      watchListItem.firstWatchedAt.diffNow('hours').hours < 1
+      Math.abs(watchListItem.firstWatchedAt.diffNow('hours').hours) < 1
     ) {
       await WatchlistItem.query().where('movieId', lastPicked.movieId).update({
         watched: false,
