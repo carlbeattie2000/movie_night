@@ -7,6 +7,8 @@ const WORDS = readFileSync(join(app.makePath('resources/data/words.txt')), 'utf-
 const VOWELS = 'aeiou'.split('')
 const CHARS = 'abcdefghijklmnopqrstuvwxyz'.split('').filter((char) => !VOWELS.includes(char))
 
+const MIN_WORDS_BEFORE_START = 60
+
 type GameData = {
   chars: string[]
   words: string[]
@@ -86,16 +88,26 @@ export class WordGame extends Game {
     return chars.sort(() => Math.random() - 0.5)
   }
 
+  #generateGameData(): GameData {
+    const chars = this.#generateCharsForGame()
+    const charCountCollection = this.#makeWordCharCount(chars)
+    const words = WORDS.filter((word) => this.#hasCharsForWord(charCountCollection, word))
+
+    return { chars, words }
+  }
+
   public startGame(): StartGameResponse {
     if (!this.start()) {
       return { error: 'could_not_start_game' }
     }
 
-    const chars = this.#generateCharsForGame()
-    const charCountCollection = this.#makeWordCharCount(chars)
-    const words = WORDS.filter((word) => this.#hasCharsForWord(charCountCollection, word))
+    let gameData = this.#generateGameData()
 
-    return { error: null, gameData: { chars, words } }
+    while (gameData.words.length < MIN_WORDS_BEFORE_START) {
+      gameData = this.#generateGameData()
+    }
+
+    return { error: null, gameData }
   }
 
   public registerUserResult(result: Result): WordGameResponse {
