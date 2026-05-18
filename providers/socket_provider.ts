@@ -13,5 +13,6 @@ export default class SocketProvider {
     const { createIO } = await import('#services/socket_service')
     createIO(server.getNodeServer())
     await import('#socket/lobby')
+    await import('#socket/word_game')
   }
 }

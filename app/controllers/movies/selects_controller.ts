@@ -1,4 +1,4 @@
-import gameRooms from '#services/game_rooms_service'
+import { lobbyStore } from '#stores/index'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class SelectsController {
@@ -6,7 +6,7 @@ export default class SelectsController {
     const user = auth.getUserOrFail()
     const movieId = request.input('movie_id')
 
-    gameRooms.set('main', user.id, movieId)
+    lobbyStore.join(user.id, movieId)
 
     return response.redirect().toRoute('matches.lobby')
   }
@@ -18,7 +18,7 @@ export default class SelectsController {
 
     const movie = watchListMovies[Math.floor(Math.random() * watchListMovies.length)]
 
-    gameRooms.set('main', user.id, movie.id)
+    lobbyStore.join(user.id, movie.id)
 
     return response.redirect().toRoute('matches.lobby')
   }

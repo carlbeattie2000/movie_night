@@ -1,4 +1,3 @@
-import MoviePickedResult from '#models/movie_picked_result'
 import WatchlistItem from '#models/watchlist_item'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -7,19 +6,10 @@ export default class MatchesController {
     return inertia.render('lobby/index', {})
   }
 
-  async cancel({ response }: HttpContext) {
-    const lastPicked = await MoviePickedResult.query()
-      .orderBy('createdAt', 'desc')
-      .preload('movie')
-      .first()
+  async cancel({ response, request }: HttpContext) {
+    const movieId = request.input('movie_id')
 
-    if (!lastPicked) {
-      return response.badRequest('No movie has been selected to cancel')
-    }
-
-    const watchListItem = await WatchlistItem.query()
-      .where('movieId', lastPicked.movieId)
-      .firstOrFail()
+    const watchListItem = await WatchlistItem.query().where('movieId', movieId).firstOrFail()
 
     if (!watchListItem) {
       return response.badRequest('No movie has been selected to cancel')
@@ -27,18 +17,16 @@ export default class MatchesController {
 
     if (
       watchListItem.firstWatchedAt === null ||
-      watchListItem.firstWatchedAt.diffNow('hours').hours < 1
+      Math.abs(watchListItem.firstWatchedAt.diffNow('hours').hours) < 1
     ) {
-      await WatchlistItem.query().where('movieId', lastPicked.movieId).update({
+      await WatchlistItem.query().where('movieId', watchListItem.movieId).update({
         watched: false,
         last_watched: null,
         first_watched_at: null,
       })
     } else {
-      await watchListItem.merge({ watched: false }).save()
+      await WatchlistItem.query().where('movieId', watchListItem.movieId).update({ watched: false })
     }
-
-    await lastPicked.delete()
 
     return response.redirect().toRoute('home.show')
   }
