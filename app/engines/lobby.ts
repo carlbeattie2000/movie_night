@@ -8,6 +8,7 @@ const BASE_PROBABILITY = 100
 type ConnectedUser = {
   movieId: number
   probability: number
+  upperBound: number
   ready: boolean
 }
 
@@ -53,12 +54,11 @@ export class Lobby {
 
   #normalizeUsersProbabilities() {
     for (const [id, value] of this.#connectedUsers) {
-      const originalProbability = value.probability
       this.#connectedUsers.set(id, {
         ...value,
-        probability: value.probability + this.#totalProbability,
+        upperBound: value.probability + this.#totalProbability,
       })
-      this.#totalProbability += originalProbability
+      this.#totalProbability += value.probability
     }
   }
 
@@ -84,6 +84,7 @@ export class Lobby {
       movieId,
       probability: BASE_PROBABILITY,
       ready: false,
+      upperBound: 0,
     })
 
     return true
@@ -122,7 +123,7 @@ export class Lobby {
     const rolled = Math.random() * this.#totalProbability
 
     for (const [id, value] of this.#connectedUsers) {
-      if (rolled <= value.probability) {
+      if (rolled <= value.upperBound) {
         return {
           userId: id,
           movieId: value.movieId,
