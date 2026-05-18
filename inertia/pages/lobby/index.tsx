@@ -12,6 +12,7 @@ type Provider = {
 }
 
 type Movie = {
+  id: number
   title: string
   posterUrl: string
   voteAverage: number
@@ -159,6 +160,7 @@ export default function Index({ user }: PageProps) {
 
           <div className="mt-8 flex flex-col gap-3">
             <Form route="matches.cancel" formMethod="POST">
+              <input type="hidden" name="movie_id" value={result.movie.id} />
               <button className="w-full px-6 py-2.5 rounded-lg border border-red-200 text-red-400 text-sm font-semibold hover:border-red-300 hover:text-red-500 transition-colors duration-150">
                 Not feeling it
               </button>
