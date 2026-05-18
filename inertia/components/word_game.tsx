@@ -2,7 +2,7 @@ import { Data } from '@generated/data'
 import { useEffect, useRef, useState } from 'react'
 import { io, type Socket } from 'socket.io-client'
 
-const GAME_LENGTH = 6
+const GAME_LENGTH_SECONDS = 50
 
 type GameData = {
   chars: string[]
@@ -84,7 +84,7 @@ export default function WordGame({
       setChars(Object.fromEntries(gameData.chars.map((char, i) => [i, char])))
       setWords(gameData.words)
       setStarted(true)
-      setTimeLeft(GAME_LENGTH)
+      setTimeLeft(GAME_LENGTH_SECONDS)
     })
 
     socket.on('word_game__winner', (winnerId: number) => {
