@@ -142,7 +142,7 @@ export default function WordGame({
   return (
     <>
       <div className="fixed inset-0 bg-black/50 z-50" />
-      <div className="fixed bg-white shadow-2xl w-[95%] h-[50%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg overflow-hidden flex flex-col gap-12 items-center z-50">
+      <div className="fixed bg-white shadow-2xl w-[95%] h-[95%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg overflow-hidden flex flex-col gap-12 items-center z-50">
         <div className="flex flex-col gap-6 p-4 items-center">
           <h1 className="text-4xl line-clamp-1">Word Game</h1>
           <p className="text-2xl line-clamp-1">{timeLeft}</p>
@@ -154,7 +154,7 @@ export default function WordGame({
           })}
         </div>
 
-        <div className="grid grid-cols-6 gap-2 py-4 px-2 items-center justify-center bg-gray-800 w-[90%]">
+        <div className="grid grid-cols-6 gap-2 py-4 px-2 items-center justify-center bg-gray-800 w-[90%] rounded-lg">
           {new Array(Object.keys(chars).length).fill(undefined).map((_, position) => {
             const charIndex = usedChars[position]
             const char = charIndex !== undefined ? chars[charIndex] : ''
@@ -177,7 +177,7 @@ export default function WordGame({
           })}
         </div>
 
-        <div className="flex gap-4 p-4 items-center justify-center">
+        <div className="grid grid-cols-6 gap-2">
           {Object.entries(chars).map(([key, char]) => {
             const charIndex = Number(key)
             const charUsed = usedChars.includes(charIndex)
@@ -185,7 +185,7 @@ export default function WordGame({
               <button
                 key={charIndex}
                 disabled={charUsed}
-                className={`px-6 py-4 rounded-md font-bold text-2xl uppercase transition-opacity
+                className={`px-4 py-3 rounded-md font-bold text-xl uppercase transition-opacity
         ${charUsed ? 'opacity-0 cursor-not-allowed' : 'bg-green-200'}`}
                 onClick={() => setUsedChars([...usedChars, charIndex])}
               >
