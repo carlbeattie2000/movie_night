@@ -50,6 +50,7 @@ export class Lobby {
     this.#startedAt = DateTime.now()
     this.#connectedUsers.clear()
     this.#result = null
+    this.#totalProbability = 0
   }
 
   #normalizeUsersProbabilities() {
