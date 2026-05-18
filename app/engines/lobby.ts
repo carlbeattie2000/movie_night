@@ -76,7 +76,7 @@ export class Lobby {
       this.#open()
     }
 
-    if (userId in this.#connectedUsers) {
+    if (this.#connectedUsers.has(userId)) {
       return false
     }
 
