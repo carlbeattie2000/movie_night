@@ -35,7 +35,7 @@ export default class MatchesController {
         first_watched_at: null,
       })
     } else {
-      await watchListItem.merge({ watched: false }).save()
+      await WatchlistItem.query().where('movieId', lastPicked.movie.id).update({ watched: false })
     }
 
     await lastPicked.delete()

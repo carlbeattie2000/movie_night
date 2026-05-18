@@ -2,7 +2,7 @@ import { Data } from '@generated/data'
 import { useEffect, useRef, useState } from 'react'
 import { io, type Socket } from 'socket.io-client'
 
-const GAME_LENGTH = 45
+const GAME_LENGTH = 6
 
 type GameData = {
   chars: string[]
