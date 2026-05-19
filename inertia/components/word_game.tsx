@@ -22,6 +22,8 @@ export default function WordGame({
     return
   }
 
+  const [waitingForPlayers, setWaitingForPlayers] = useState<boolean>(false)
+
   const [winner, setWinner] = useState<number | null>(null)
   const [ioInstance, setIoInstance] = useState<Socket | null>(null)
 
@@ -81,6 +83,7 @@ export default function WordGame({
     const socket = io()
 
     socket.on('word_game__started', (gameData: GameData) => {
+      setWaitingForPlayers(false)
       setChars(Object.fromEntries(gameData.chars.map((char, i) => [i, char])))
       setWords(new Set(gameData.words))
       setStarted(true)
@@ -97,25 +100,54 @@ export default function WordGame({
 
   function onStart() {
     if (ioInstance) {
+      setWaitingForPlayers(true)
       ioInstance.emit('word_game__start', user?.id)
     }
+  }
+
+  if (waitingForPlayers) {
+    return (
+      <>
+        <style>{`
+    @keyframes bop {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .dot { width: 8px; height: 8px; border-radius: 9999px; background: #16a34a; animation: bop 0.8s ease-in-out infinite; }
+    .dot:nth-child(2) { animation-delay: 0.15s; }
+    .dot:nth-child(3) { animation-delay: 0.3s; }
+  `}</style>
+        <div className="fixed inset-0 bg-black/50 z-50" />
+        <div className="fixed bg-white shadow-lg w-80 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl border border-gray-100 p-10 z-50 flex flex-col items-center gap-6">
+          <div className="flex gap-2 items-center">
+            <div className="dot" />
+            <div className="dot" />
+            <div className="dot" />
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-lg font-medium text-gray-900">Waiting for players</p>
+          </div>
+        </div>
+      </>
+    )
   }
 
   if (winner !== null) {
     return (
       <>
         <div className="fixed inset-0 bg-black/50 z-50" />
-        <div className="fixed bg-white shadow-2xl w-[95%] h-[50%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg overflow-hidden z-50">
-          <div className="flex flex-col gap-6 h-full p-4 justify-center items-center">
-            <h1>{winner} </h1>
-            <p>WON</p>
-            <button
-              className="px-4 py-6 bg-red-400 hover:bg-red-200 text-white font-bold text-2xl w-[60%] rounded-sm"
-              onClick={onCloseClick}
-            >
-              Close
-            </button>
+        <div className="fixed bg-white shadow-lg w-80 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl border border-gray-100 p-10 z-50 flex flex-col items-center gap-6">
+          <div className="text-5xl">🏆</div>
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-xs text-gray-400 uppercase tracking-widest">Winner</p>
+            <p className="text-2xl font-semibold text-gray-900">{winner}</p>
           </div>
+          <button
+            className="w-full py-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium rounded-lg transition-colors"
+            onClick={onCloseClick}
+          >
+            Close
+          </button>
         </div>
       </>
     )
