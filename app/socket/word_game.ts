@@ -1,30 +1,41 @@
 import User from '#models/user'
 import { getIO } from '#services/socket_service'
-import { lobbyStore } from '#stores/index'
-import { WordGame } from '../engines/word_game.ts'
+import { lobbyStore, wordGameStore } from '#stores/index'
 
 const io = getIO()
-
-let gameState: WordGame = new WordGame()
 
 function wordGame() {
   if (!io) return
 
   io.on('connection', (socket) => {
-    socket.on('word_game__start', (userId: number) => {
-      if (gameState.invalid() || gameState.finished()) {
-        gameState.reset()
+    socket.on('word_game__connect', (userId: number) => {
+      wordGameStore.join(userId)
+
+      if (wordGameStore.hasAnyUserDeclined()) {
+        socket.emit('word_game__declined')
+      }
+    })
+
+    socket.on('word_game__decline', (userId: number) => {
+      wordGameStore.decline(userId)
+
+      io.sockets.emit('word_game__declined')
+    })
+
+    socket.on('word_game__ready_up', (userId: number) => {
+      if (wordGameStore.hasAnyUserDeclined()) {
+        socket.emit('word_game__declined')
       }
 
-      gameState.connectUser(userId)
+      const readiedUp = wordGameStore.readyUp(userId)
 
-      const started = gameState.startGame()
+      if (readiedUp) {
+        const started = wordGameStore.start()
 
-      if (started.error === 'could_not_start_game') {
-        return
+        if (started.error === null) {
+          io.sockets.emit('word_game__started', started.gameData)
+        }
       }
-
-      io.sockets.emit('word_game__started', started.gameData)
     })
 
     socket.on('word_game__result', async (userId: number, words: string[]) => {
@@ -32,18 +43,19 @@ function wordGame() {
         return
       }
 
-      if (gameState.invalid()) {
-        return
+      if (wordGameStore.invalid()) {
+        wordGameStore.reset()
       }
 
-      gameState.registerUserResult({ userId, words })
+      wordGameStore.userGameResult({ userId, words })
 
-      const results = gameState.getWinner()
+      const results = wordGameStore.getWinner()
 
       if (results.error === null) {
         lobbyStore.increaseUsersProbability(results.winner, 25)
         const user = await User.findOrFail(results.winner)
         io.sockets.emit('word_game__winner', user.name)
+        wordGameStore.reset()
       }
     })
   })

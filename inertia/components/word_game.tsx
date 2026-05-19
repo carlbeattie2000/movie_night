@@ -22,13 +22,15 @@ export default function WordGame({
     return
   }
 
+  const [waitingForPlayers, setWaitingForPlayers] = useState<boolean>(false)
+
   const [winner, setWinner] = useState<number | null>(null)
   const [ioInstance, setIoInstance] = useState<Socket | null>(null)
 
   const [started, setStarted] = useState<boolean>(false)
   const [timeLeft, setTimeLeft] = useState<number>(0)
 
-  const [words, setWords] = useState<string[]>([])
+  const [words, setWords] = useState<Set<string>>(new Set())
   const [usedWords, setUsedWords] = useState<string[]>([])
 
   const [chars, setChars] = useState<Record<number, string>>({})
@@ -67,7 +69,7 @@ export default function WordGame({
       .join('')
       .toLowerCase()
 
-    if (words.includes(currentWord) && !usedWords.includes(currentWord)) {
+    if (words.has(currentWord) && !usedWordsRef.current.includes(currentWord)) {
       updateUsedWords([...usedWords, currentWord])
       setUsedChars([])
     }
@@ -80,9 +82,14 @@ export default function WordGame({
   useEffect(() => {
     const socket = io()
 
+    socket.on('word_game__declined', () => {
+      onCloseClick()
+    })
+
     socket.on('word_game__started', (gameData: GameData) => {
+      setWaitingForPlayers(false)
       setChars(Object.fromEntries(gameData.chars.map((char, i) => [i, char])))
-      setWords(gameData.words)
+      setWords(new Set(gameData.words))
       setStarted(true)
       setTimeLeft(GAME_LENGTH_SECONDS)
     })
@@ -97,25 +104,54 @@ export default function WordGame({
 
   function onStart() {
     if (ioInstance) {
-      ioInstance.emit('word_game__start', user?.id)
+      setWaitingForPlayers(true)
+      ioInstance.emit('word_game__ready_up', user?.id)
     }
+  }
+
+  if (waitingForPlayers) {
+    return (
+      <>
+        <style>{`
+    @keyframes bop {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .dot { width: 8px; height: 8px; border-radius: 9999px; background: #16a34a; animation: bop 0.8s ease-in-out infinite; }
+    .dot:nth-child(2) { animation-delay: 0.15s; }
+    .dot:nth-child(3) { animation-delay: 0.3s; }
+  `}</style>
+        <div className="fixed inset-0 bg-black/50 z-50" />
+        <div className="fixed bg-white shadow-lg w-80 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl border border-gray-100 p-10 z-50 flex flex-col items-center gap-6">
+          <div className="flex gap-2 items-center">
+            <div className="dot" />
+            <div className="dot" />
+            <div className="dot" />
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-lg font-medium text-gray-900">Waiting for players</p>
+          </div>
+        </div>
+      </>
+    )
   }
 
   if (winner !== null) {
     return (
       <>
         <div className="fixed inset-0 bg-black/50 z-50" />
-        <div className="fixed bg-white shadow-2xl w-[95%] h-[50%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg overflow-hidden z-50">
-          <div className="flex flex-col gap-6 h-full p-4 justify-center items-center">
-            <h1>{winner} </h1>
-            <p>WON</p>
-            <button
-              className="px-4 py-6 bg-red-400 hover:bg-red-200 text-white font-bold text-2xl w-[60%] rounded-sm"
-              onClick={onCloseClick}
-            >
-              Close
-            </button>
+        <div className="fixed bg-white shadow-lg w-80 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl border border-gray-100 p-10 z-50 flex flex-col items-center gap-6">
+          <div className="text-5xl">🏆</div>
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-xs text-gray-400 uppercase tracking-widest">Winner</p>
+            <p className="text-2xl font-semibold text-gray-900">{winner}</p>
           </div>
+          <button
+            className="w-full py-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium rounded-lg transition-colors"
+            onClick={onCloseClick}
+          >
+            Close
+          </button>
         </div>
       </>
     )
@@ -125,15 +161,17 @@ export default function WordGame({
     return (
       <>
         <div className="fixed inset-0 bg-black/50 z-50" />
-        <div className="fixed bg-white shadow-2xl w-[95%] h-[50%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg overflow-hidden z-50">
-          <div className="flex flex-col gap-6 h-full p-4 justify-center items-center">
-            <button
-              className="px-4 py-6 bg-green-400 hover:bg-green-200 text-white font-bold text-2xl w-[60%] rounded-sm"
-              onClick={onStart}
-            >
-              Start
-            </button>
+        <div className="fixed bg-white shadow-lg w-80 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl border border-gray-100 p-10 z-50 flex flex-col items-center gap-6">
+          <div className="flex flex-col items-center gap-1">
+            <h1 className="text-2xl font-medium text-gray-900">Word Game</h1>
+            <p className="text-sm text-gray-400">Make as many words as you can</p>
           </div>
+          <button
+            className="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-medium rounded-lg transition-colors"
+            onClick={onStart}
+          >
+            Start game
+          </button>
         </div>
       </>
     )
