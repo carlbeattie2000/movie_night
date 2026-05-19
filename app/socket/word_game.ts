@@ -11,20 +11,34 @@ function wordGame() {
   if (!io) return
 
   io.on('connection', (socket) => {
-    socket.on('word_game__start', (userId: number) => {
-      if (gameState.invalid() || gameState.finished()) {
-        gameState.reset()
+    socket.on('word_game__connect', (userId: number) => {
+      gameState.join(userId)
+
+      if (gameState.hasAnyUserDeclined()) {
+        socket.emit('word_game__declined')
+      }
+    })
+
+    socket.on('word_game__decline', (userId: number) => {
+      gameState.decline(userId)
+
+      io.sockets.emit('word_game__declined')
+    })
+
+    socket.on('word_game__ready_up', (userId: number) => {
+      if (gameState.hasAnyUserDeclined()) {
+        socket.emit('word_game__declined')
       }
 
-      gameState.connectUser(userId)
+      const readiedUp = gameState.readyUp(userId)
 
-      const started = gameState.startGame()
+      if (readiedUp) {
+        const started = gameState.start()
 
-      if (started.error === 'could_not_start_game') {
-        return
+        if (started.error === null) {
+          io.sockets.emit('word_game__started', started.gameData)
+        }
       }
-
-      io.sockets.emit('word_game__started', started.gameData)
     })
 
     socket.on('word_game__result', async (userId: number, words: string[]) => {
@@ -33,10 +47,10 @@ function wordGame() {
       }
 
       if (gameState.invalid()) {
-        return
+        gameState.reset()
       }
 
-      gameState.registerUserResult({ userId, words })
+      gameState.userGameResult({ userId, words })
 
       const results = gameState.getWinner()
 
@@ -44,6 +58,7 @@ function wordGame() {
         lobbyStore.increaseUsersProbability(results.winner, 25)
         const user = await User.findOrFail(results.winner)
         io.sockets.emit('word_game__winner', user.name)
+        gameState.reset()
       }
     })
   })

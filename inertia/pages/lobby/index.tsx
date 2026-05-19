@@ -39,6 +39,13 @@ export default function Index({ user }: PageProps) {
   useEffect(() => {
     const socket = io()
 
+    socket.emit('word_game__connect', user?.id)
+
+    socket.on('word_game__declined', () => {
+      setAskToPlayOpen(false)
+      socket.emit('ready', user?.id)
+    })
+
     socket.on('result', (result: Result) => {
       setLeaving(true)
       setTimeout(() => setResult(result), 700)
@@ -64,6 +71,7 @@ export default function Index({ user }: PageProps) {
 
           if (ioInstance) {
             ioInstance.emit('ready', user?.id)
+            ioInstance.emit('word_game__decline', user?.id)
           }
         }}
         onSuccess={() => {

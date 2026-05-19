@@ -82,6 +82,10 @@ export default function WordGame({
   useEffect(() => {
     const socket = io()
 
+    socket.on('word_game__declined', () => {
+      onCloseClick()
+    })
+
     socket.on('word_game__started', (gameData: GameData) => {
       setWaitingForPlayers(false)
       setChars(Object.fromEntries(gameData.chars.map((char, i) => [i, char])))
@@ -101,7 +105,7 @@ export default function WordGame({
   function onStart() {
     if (ioInstance) {
       setWaitingForPlayers(true)
-      ioInstance.emit('word_game__start', user?.id)
+      ioInstance.emit('word_game__ready_up', user?.id)
     }
   }
 

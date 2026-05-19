@@ -96,10 +96,12 @@ export class WordGame extends Game {
     return { chars, words }
   }
 
-  public startGame(): StartGameResponse {
-    if (!this.start()) {
+  public start(): StartGameResponse {
+    if (!this.canStartGame()) {
       return { error: 'could_not_start_game' }
     }
+
+    this.startGame()
 
     let gameData = this.#generateGameData()
 
@@ -110,7 +112,7 @@ export class WordGame extends Game {
     return { error: null, gameData }
   }
 
-  public registerUserResult(result: Result): WordGameResponse {
+  public userGameResult(result: Result): WordGameResponse {
     if (!this.hasUser(result.userId)) {
       return 'user_not_registered'
     }
@@ -129,7 +131,7 @@ export class WordGame extends Game {
       return { error: null, winner: this.#winner }
     }
 
-    if (this.#results.length !== this.connectedUsers()) {
+    if (this.#results.length !== this.connectedUsersLength()) {
       return { error: 'not_all_players_submited' }
     }
 
@@ -150,13 +152,14 @@ export class WordGame extends Game {
     }
 
     this.#winner = userId
-    this.finish()
+    this.finishGame()
 
     return { error: null, winner: userId }
   }
 
   public override reset(): void {
     super.reset()
+    this.resetLobby()
 
     this.#results = []
     this.#winner = null
