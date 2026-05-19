@@ -125,15 +125,17 @@ export default function WordGame({
     return (
       <>
         <div className="fixed inset-0 bg-black/50 z-50" />
-        <div className="fixed bg-white shadow-2xl w-[95%] h-[50%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg overflow-hidden z-50">
-          <div className="flex flex-col gap-6 h-full p-4 justify-center items-center">
-            <button
-              className="px-4 py-6 bg-green-400 hover:bg-green-200 text-white font-bold text-2xl w-[60%] rounded-sm"
-              onClick={onStart}
-            >
-              Start
-            </button>
+        <div className="fixed bg-white shadow-lg w-80 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl border border-gray-100 p-10 z-50 flex flex-col items-center gap-6">
+          <div className="flex flex-col items-center gap-1">
+            <h1 className="text-2xl font-medium text-gray-900">Word Game</h1>
+            <p className="text-sm text-gray-400">Make as many words as you can</p>
           </div>
+          <button
+            className="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-medium rounded-lg transition-colors"
+            onClick={onStart}
+          >
+            Start game
+          </button>
         </div>
       </>
     )
