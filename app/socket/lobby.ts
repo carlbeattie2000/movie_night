@@ -2,7 +2,7 @@ import Movie from '#models/movie'
 import User from '#models/user'
 import { MatchService } from '#services/match_service'
 import { getIO } from '#services/socket_service'
-import { lobbyStore } from '#stores/index'
+import { lobbyStore, wordGameStore } from '#stores/index'
 import { tmdb } from '../utils/tmdb.ts'
 
 const io = getIO()
@@ -31,6 +31,8 @@ function lobbySocket() {
           await matchesService.markMovieAsWatched(movie.id)
         }
         const providers = await tmdb.providers(movie.tmdbId)
+
+        wordGameStore.reset()
 
         if (providers.status === 'success') {
           const { results } = providers.result
