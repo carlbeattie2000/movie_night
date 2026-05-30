@@ -14,6 +14,7 @@ export default function Index({ result }: PageProps) {
           return (
             <MovieCard
               id={movie.id}
+              key={movie.id}
               title={movie.title}
               releaseDate={movie.release_date}
               posterUrl={movie.poster_path}

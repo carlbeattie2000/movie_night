@@ -5,7 +5,6 @@ import { MobileGenreScrollList } from '~/components/mobile_genre_scroll_list'
 import MovieCard from '~/components/movie_card'
 import Popcorn from '~/components/popcorn'
 import RateMovie from '~/components/rate_movie'
-import WordGame from '~/components/word_game'
 import { InertiaProps } from '~/types'
 
 type PageProps = InertiaProps<{
@@ -89,6 +88,7 @@ export default function Home({
                     {usersUnwatched.map((movie) => {
                       return (
                         <MovieCard
+                          key={movie.id}
                           {...movie}
                           selectBtn
                           removeBtn
@@ -116,6 +116,7 @@ export default function Home({
                 return (
                   <MovieCard
                     {...watchlistItem.movie}
+                    key={watchlistItem.movie.id}
                     lastWatched={watchlistItem.daysSinceWatched}
                     selectBtn={watchlistItem.userId === user?.id}
                     onClick={() => {
@@ -133,8 +134,6 @@ export default function Home({
               setMovieToRateId(null)
             }}
           />
-
-          <WordGame user={user} />
         </div>
       </div>
     </>

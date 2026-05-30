@@ -27,6 +27,7 @@ export default function Index({ result, totalPages, currentPage, genreId }: Page
           return (
             <MovieCard
               id={movie.id}
+              key={movie.id}
               title={movie.title}
               posterUrl={movie.poster_path}
               releaseDate={movie.release_date}
@@ -37,7 +38,7 @@ export default function Index({ result, totalPages, currentPage, genreId }: Page
         })}
       </div>
 
-      <div className='mb-8'>
+      <div className="mb-8">
         <Pagination
           route="movies.browse"
           currentPage={currentPage}

@@ -70,7 +70,6 @@ export default function MovieCard({
     <div
       className="flex flex-col shadow-2xl rounded-b bg-white"
       id="movie_{{ id }}"
-      key={id}
       onClick={() => {
         if (onClick) {
           onClick()
