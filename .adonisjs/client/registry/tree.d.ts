@@ -14,6 +14,7 @@ export interface ApiDefinition {
     api: {
       store: typeof routes['watchlist.api.store']
       destroy: typeof routes['watchlist.api.destroy']
+      watched: typeof routes['watchlist.api.watched']
     }
   }
   movies: {

@@ -10,6 +10,7 @@ export type ScannedRoutes = {
     'home.show': { paramsTuple?: []; params?: {} }
     'watchlist.api.store': { paramsTuple?: []; params?: {} }
     'watchlist.api.destroy': { paramsTuple?: []; params?: {} }
+    'watchlist.api.watched': { paramsTuple?: []; params?: {} }
     'movies.api.fetch': { paramsTuple: [ParamValue]; params: {'movieId': ParamValue} }
     'movies.ratings.get_movie_to_rate': { paramsTuple?: []; params?: {} }
     'movies.ratings.get_next_to_rate': { paramsTuple?: []; params?: {} }
@@ -42,6 +43,7 @@ export type ScannedRoutes = {
     'login.store': { paramsTuple?: []; params?: {} }
     'login.destroy': { paramsTuple?: []; params?: {} }
     'watchlist.api.store': { paramsTuple?: []; params?: {} }
+    'watchlist.api.watched': { paramsTuple?: []; params?: {} }
     'movies.ratings.get_movie_to_rate': { paramsTuple?: []; params?: {} }
     'movies.ratings.get_next_to_rate': { paramsTuple?: []; params?: {} }
     'movies.ratings.rate_movie': { paramsTuple?: []; params?: {} }

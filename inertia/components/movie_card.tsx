@@ -12,6 +12,8 @@ type MovieCardProps = {
   selectBtn?: boolean
   addBtn?: boolean
   removeBtn?: boolean
+  watchedBtn?: boolean
+  onWatched?: React.MouseEventHandler<HTMLButtonElement>
   onRemove?: React.MouseEventHandler<HTMLButtonElement>
   onClick?: () => void
 } & Partial<Data.Movie>
@@ -26,8 +28,10 @@ export default function MovieCard({
   ratedBy,
   selectBtn,
   addBtn,
+  watchedBtn,
   removeBtn,
   onRemove,
+  onWatched,
   onClick,
 }: MovieCardProps) {
   const [addStatus, setAddStatus] = useState<string>('Add')
@@ -109,6 +113,8 @@ export default function MovieCard({
             <Button text="Select" variant="normal" />
           </Form>
         )}
+
+        {watchedBtn && <Button text="Watched" variant="success" onClick={onWatched} />}
 
         {removeBtn && <Button text="Remove" variant="danger" onClick={onRemove} />}
       </div>

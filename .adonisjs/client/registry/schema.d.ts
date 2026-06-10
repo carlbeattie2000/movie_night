@@ -79,6 +79,18 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/watchlist/api_controller').default['destroy']>>>
     }
   }
+  'watchlist.api.watched': {
+    methods: ["POST"]
+    pattern: '/api/watchlist/watched'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/watchlist/api_controller').default['watched']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/watchlist/api_controller').default['watched']>>>
+    }
+  }
   'movies.api.fetch': {
     methods: ["GET","HEAD"]
     pattern: '/api/movies/:movieId'

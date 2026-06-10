@@ -2,8 +2,10 @@ import Genre from '#models/genre'
 import Movie from '#models/movie'
 import MovieGenre from '#models/movie_genre'
 import WatchlistItem from '#models/watchlist_item'
+import { DateTime } from 'luxon'
 import { tmdb } from '../utils/tmdb.ts'
 import db from '@adonisjs/lucid/services/db'
+import MoviePickedResult from '#models/movie_picked_result'
 
 type AddMovieResult = { status: 'success'; message: string } | { status: 'error'; message: string }
 
@@ -81,5 +83,27 @@ export class WatchlistService {
       .preload('movie', (query) => {
         query.preload('ratedBy')
       })
+  }
+
+  async markMovieAsWatched(movieId: number) {
+    await db.transaction(async (trx) => {
+      await WatchlistItem.query({ client: trx })
+        .whereIn('userId', [1, 2])
+        .where('movieId', movieId)
+        .update({ watched: true, lastWatched: DateTime.now().toSQL() })
+
+      await WatchlistItem.query({ client: trx })
+        .whereIn('userId', [1, 2])
+        .where('movieId', movieId)
+        .whereNull('firstWatchedAt')
+        .update({ firstWatchedAt: DateTime.now().toSQL() })
+
+      await MoviePickedResult.create(
+        {
+          movieId,
+        },
+        { client: trx }
+      )
+    })
   }
 }

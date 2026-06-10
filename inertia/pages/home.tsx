@@ -43,6 +43,22 @@ export default function Home({
     }
   }
 
+  const onWatchedMovie = async (movieId: number) => {
+    const res = await fetch('/api/watchlist/watched', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        movie_id: movieId,
+      }),
+    })
+
+    if (res.ok) {
+      setUsersUnwatched(usersUnwatched.filter((movie) => movie.id !== movieId))
+    }
+  }
+
   const updateLocalSearchResults = () => {
     if (localSearchInput === '') {
       return setUsersUnwatched(selfUnwatched)
@@ -92,6 +108,8 @@ export default function Home({
                           {...movie}
                           selectBtn
                           removeBtn
+                          watchedBtn
+                          onWatched={() => onWatchedMovie(movie.id)}
                           onRemove={() => onRemoveMovie(movie.id)}
                         />
                       )

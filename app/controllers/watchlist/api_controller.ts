@@ -27,4 +27,12 @@ export default class ApiController {
 
     return response.noContent()
   }
+
+  async watched({ request, response }: HttpContext) {
+    const movieId = request.input('movie_id')
+
+    this.watchlistService.markMovieAsWatched(movieId)
+
+    return response.noContent()
+  }
 }

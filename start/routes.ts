@@ -28,6 +28,7 @@ router
       .group(() => {
         router.post('add', [controllers.watchlist.Api, 'store'])
         router.delete('remove', [controllers.watchlist.Api, 'destroy'])
+        router.post('watched', [controllers.watchlist.Api, 'watched'])
       })
       .prefix('api/watchlist')
       .as('watchlist')
