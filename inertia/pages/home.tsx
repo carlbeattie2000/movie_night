@@ -15,6 +15,12 @@ type PageProps = InertiaProps<{
   other: Data.User
 }>
 
+enum MoviesToShow {
+  OWN,
+  OTHER,
+  WATCHED,
+}
+
 export default function Home({
   genres,
   selfUnwatched,
@@ -26,6 +32,8 @@ export default function Home({
   const [usersUnwatched, setUsersUnwatched] = useState<Data.Movie[]>(selfUnwatched)
   const [localSearchInput, setLocalSearchInput] = useState<string>('')
   const [movieToRateId, setMovieToRateId] = useState<number | null>(null)
+
+  const [moviesToShow, setMoviesToShow] = useState<MoviesToShow>(MoviesToShow.OWN)
 
   const onRemoveMovie = async (movieId: number) => {
     const res = await fetch('/api/watchlist/remove', {
@@ -81,9 +89,90 @@ export default function Home({
         <Popcorn amount={256} />
 
         <div className="max-w-7xl mx-auto px-4 py-6 relative z-20">
-          <MobileGenreScrollList genres={genres} />
+          <div className="flex flex-col gap-8 md:hidden">
+            <MobileGenreScrollList genres={genres} />
 
-          <div className="flex gap-8">
+            <div className="md:hidden flex gap-2 overflow-x-auto">
+              <button
+                onClick={() => setMoviesToShow(MoviesToShow.OWN)}
+                className="shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full bg-gray-400 text-white hover:bg-yellow-400 hover:text-black transition-colors duration-150"
+              >
+                My List
+              </button>
+
+              <button
+                onClick={() => setMoviesToShow(MoviesToShow.OTHER)}
+                className="shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full bg-zinc-400 text-white hover:bg-yellow-400 hover:text-black transition-colors duration-150"
+              >
+                {other.name}'s List
+              </button>
+
+              <button
+                onClick={() => setMoviesToShow(MoviesToShow.WATCHED)}
+                className="shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full bg-zinc-400 text-white hover:bg-yellow-400 hover:text-black transition-colors duration-150"
+              >
+                Watched
+              </button>
+            </div>
+
+            <h2 className="text-zinc-900 text-lg font-semibold">
+              {moviesToShow === MoviesToShow.OWN
+                ? user?.name + "'s picks"
+                : moviesToShow === MoviesToShow.OTHER
+                  ? other.name + "'s picks"
+                  : 'Watched'}{' '}
+            </h2>
+
+            {moviesToShow === MoviesToShow.OWN && (
+              <input
+                placeholder="search"
+                className="border border-gray-400 rounded-sm px-4 py-2 w-full"
+                value={localSearchInput}
+                onInput={(e) => {
+                  setLocalSearchInput(e.currentTarget.value)
+                }}
+              />
+            )}
+
+            <div className="grid grid-cols-2 gap-4">
+              {moviesToShow === MoviesToShow.OWN &&
+                usersUnwatched.map((movie) => {
+                  return (
+                    <MovieCard
+                      key={movie.id}
+                      {...movie}
+                      selectBtn
+                      removeBtn
+                      watchedBtn
+                      onWatched={() => onWatchedMovie(movie.id)}
+                      onRemove={() => onRemoveMovie(movie.id)}
+                    />
+                  )
+                })}
+
+              {moviesToShow === MoviesToShow.OTHER &&
+                otherUnwatched.map((movie) => {
+                  return <MovieCard {...movie} />
+                })}
+
+              {moviesToShow === MoviesToShow.WATCHED &&
+                combinedWatched.map((watchlistItem) => {
+                  return (
+                    <MovieCard
+                      {...watchlistItem.movie}
+                      key={watchlistItem.movie.id}
+                      lastWatched={watchlistItem.daysSinceWatched}
+                      selectBtn={watchlistItem.userId === user?.id}
+                      onClick={() => {
+                        setMovieToRateId(watchlistItem.movie.id)
+                      }}
+                    />
+                  )
+                })}
+            </div>
+          </div>
+
+          <div className="gap-8 hidden md:flex">
             <GenreSidebar genres={genres} />
 
             <div className="flex-1 min-w-0">
@@ -127,7 +216,7 @@ export default function Home({
               </div>
             </div>
           </div>
-          <div className="md:pl-8 md:flex-1 mt-8">
+          <div className="md:pl-8 md:flex-1 mt-8 hidden md:block">
             <h2 className="text-zinc-900 text-lg font-semibold mb-4">Watched</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
               {combinedWatched.map((watchlistItem) => {

@@ -9,7 +9,7 @@ interface GenreCardProps {
 
 export function MobileGenreScrollList({ genres }: GenreCardProps) {
   return (
-    <div className="md:hidden flex gap-2 overflow-x-auto pb-3 mb-4">
+    <div className="md:hidden flex gap-2 overflow-x-auto">
       {genres.map((genre) => {
         return (
           <Link href={urlFor('movies.browse', {}, { qs: { genreId: genre.tmdbId } })} key={genre.id}>
