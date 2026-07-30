@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import RatedBy from './rated_by'
 
 interface PosterProps {
@@ -11,16 +12,26 @@ interface PosterProps {
 }
 
 export default function MovieCardPoster({ url, title, ratedByUsers }: PosterProps) {
+  const [ratedByToggled, setRatedByToggled] = useState(false)
+
   const showRatedBy = ratedByUsers && ratedByUsers.length > 0
 
   return (
-    <div className="aspect-2/3 overflow-hidden relative">
+    <div
+      className="aspect-2/3 overflow-hidden relative"
+      onClick={() => {
+        setRatedByToggled(!ratedByToggled)
+      }}
+    >
       {showRatedBy && (
-        <div className="bg-[rgba(0,0,0,0.85)] absolute w-full h-fit bottom-0 p-2 flex flex-col gap-2">
-          <RatedBy
-            show={ratedByUsers !== undefined && ratedByUsers.length > 0}
-            ratedByUsers={ratedByUsers}
-          />
+        <div className={`${ratedByToggled ? 'opacity-100' : 'opacity-0'} transition-opacity`}>
+          <div className="absolute w-full h-full bg-[rgba(0,0,0,.95)] z-30"></div>
+          <div className="absolute w-full h-full bottom-0 p-2 flex flex-col gap-2 z-30">
+            <RatedBy
+              show={ratedByUsers !== undefined && ratedByUsers.length > 0}
+              ratedByUsers={ratedByUsers}
+            />
+          </div>
         </div>
       )}
 

@@ -9,7 +9,7 @@ export default function IconButtonContainer({
 }) {
   return (
     <div
-      className={`absolute top-2 right-2 ${background ?? 'bg-black/85'} p-1 rounded-full flex flex-col`}
+      className={`absolute top-2 right-2 z-10 ${background ?? 'bg-black/85'} p-1 rounded-full flex flex-col`}
     >
       {children}
     </div>
