@@ -11,10 +11,6 @@ export default class extends BaseSchema {
     this.defer(async (db) => {
       await db.from(this.tableName).whereNull('media_type').update({ media_type: 'movie' })
     })
-
-    this.schema.alterTable(this.tableName, (table) => {
-      table.string('media_type', 10).notNullable().alter()
-    })
   }
 
   async down() {
