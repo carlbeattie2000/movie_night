@@ -48,6 +48,12 @@ const routes = {
     tokens: [{"old":"/api/watchlist/watched","type":0,"val":"api","end":""},{"old":"/api/watchlist/watched","type":0,"val":"watchlist","end":""},{"old":"/api/watchlist/watched","type":0,"val":"watched","end":""}],
     types: placeholder as Registry['watchlist.api.watched']['types'],
   },
+  'watchlist.api.destroy_watched': {
+    methods: ["DELETE"],
+    pattern: '/api/watchlist/watched/remove',
+    tokens: [{"old":"/api/watchlist/watched/remove","type":0,"val":"api","end":""},{"old":"/api/watchlist/watched/remove","type":0,"val":"watchlist","end":""},{"old":"/api/watchlist/watched/remove","type":0,"val":"watched","end":""},{"old":"/api/watchlist/watched/remove","type":0,"val":"remove","end":""}],
+    types: placeholder as Registry['watchlist.api.destroy_watched']['types'],
+  },
   'movies.api.fetch': {
     methods: ["GET","HEAD"],
     pattern: '/api/movies/:movieId',

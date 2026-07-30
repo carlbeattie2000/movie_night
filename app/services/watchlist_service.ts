@@ -119,4 +119,17 @@ export class WatchlistService {
       )
     })
   }
+
+  async removeWatchedMovie(userId: number, movieId: number) {
+    const affectedRows = await WatchlistItem.query()
+      .where('userId', userId)
+      .andWhere('movieId', movieId)
+      .update({ watched: false })
+
+    if (affectedRows.length > 0) {
+      return true
+    }
+
+    return false
+  }
 }

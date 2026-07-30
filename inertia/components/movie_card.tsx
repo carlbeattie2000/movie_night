@@ -11,11 +11,12 @@ type MovieCardProps = {
   voteAverage?: number
   selectBtn?: boolean
   addBtn?: boolean
+  rateBtn?: boolean
   removeBtn?: boolean
   watchedBtn?: boolean
   onWatched?: React.MouseEventHandler<HTMLButtonElement>
   onRemove?: React.MouseEventHandler<HTMLButtonElement>
-  onClick?: () => void
+  onRate?: () => void
 } & Partial<Data.Movie>
 
 export default function MovieCard({
@@ -29,11 +30,12 @@ export default function MovieCard({
   ratedBy,
   selectBtn,
   addBtn,
+  rateBtn,
   watchedBtn,
   removeBtn,
   onRemove,
   onWatched,
-  onClick,
+  onRate,
 }: MovieCardProps) {
   const [addStatus, setAddStatus] = useState<string>('Add')
   const [addVariant, setAddVariant] = useState<'normal' | 'success' | 'danger'>('normal')
@@ -73,15 +75,7 @@ export default function MovieCard({
     }
   }
   return (
-    <div
-      className="flex flex-col shadow-2xl rounded-b bg-white"
-      id="movie_{{ id }}"
-      onClick={() => {
-        if (onClick) {
-          onClick()
-        }
-      }}
-    >
+    <div className="flex flex-col shadow-2xl rounded-b bg-white" id="movie_{{ id }}">
       <div className="aspect-2/3 overflow-hidden">
         <img src={posterUrl} alt={title} className="rounded-t w-full h-full object-cover" />
       </div>
@@ -117,6 +111,8 @@ export default function MovieCard({
         )}
 
         {watchedBtn && <Button text="Watched" variant="success" onClick={onWatched} />}
+
+        {onRate && rateBtn && <Button text="Rate" variant="normal" onClick={onRate} />}
 
         {removeBtn && <Button text="Remove" variant="danger" onClick={onRemove} />}
       </div>

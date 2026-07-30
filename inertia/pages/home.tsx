@@ -32,6 +32,7 @@ export default function Home({
   const [usersUnwatched, setUsersUnwatched] = useState<Data.Movie[]>(selfUnwatched)
   const [localSearchInput, setLocalSearchInput] = useState<string>('')
   const [movieToRateId, setMovieToRateId] = useState<number | null>(null)
+  const [combinedWatchedList, setCombinedWatchedList] = useState(combinedWatched)
 
   const [moviesToShow, setMoviesToShow] = useState<MoviesToShow>(MoviesToShow.OWN)
 
@@ -51,6 +52,32 @@ export default function Home({
     }
   }
 
+  const onRemoveFromWatchedList = async (movieId: number) => {
+    const res = await fetch('/api/watchlist/watched/remove', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        movie_id: movieId,
+      }),
+    })
+
+    if (res.ok) {
+      const watchlistItemToRemove = combinedWatchedList.find((watchlistItem) => {
+        return watchlistItem.movie.id === movieId
+      })
+      if (watchlistItemToRemove) {
+        setUsersUnwatched([...usersUnwatched, watchlistItemToRemove.movie])
+        setCombinedWatchedList(
+          combinedWatchedList.filter((watchlistItem) => {
+            return watchlistItem.movie.id !== movieId
+          })
+        )
+      }
+    }
+  }
+
   const onWatchedMovie = async (movieId: number) => {
     const res = await fetch('/api/watchlist/watched', {
       method: 'POST',
@@ -63,7 +90,14 @@ export default function Home({
     })
 
     if (res.ok) {
-      setUsersUnwatched(usersUnwatched.filter((movie) => movie.id !== movieId))
+      const movieAddingToWatchlist = usersUnwatched.find((movie) => movie.id === movieId)
+      if (movieAddingToWatchlist && user?.id) {
+        setCombinedWatchedList([
+          ...combinedWatchedList,
+          { userId: user.id, movie: movieAddingToWatchlist, daysSinceWatched: 0 },
+        ])
+        setUsersUnwatched(usersUnwatched.filter((movie) => movie.id !== movieId))
+      }
     }
   }
 
@@ -156,16 +190,24 @@ export default function Home({
                 })}
 
               {moviesToShow === MoviesToShow.WATCHED &&
-                combinedWatched.map((watchlistItem) => {
+                combinedWatchedList.map((watchlistItem) => {
+                  const isOwner = watchlistItem.userId === user?.id
+                  const hasRatedMovie = watchlistItem.movie.ratedBy
+                    ? watchlistItem.movie.ratedBy.find((rating) => rating.name === user?.name)
+                    : false
+
                   return (
                     <MovieCard
                       {...watchlistItem.movie}
                       key={watchlistItem.movie.id}
                       lastWatched={watchlistItem.daysSinceWatched}
-                      selectBtn={watchlistItem.userId === user?.id}
-                      onClick={() => {
+                      selectBtn
+                      rateBtn={!hasRatedMovie}
+                      onRate={() => {
                         setMovieToRateId(watchlistItem.movie.id)
                       }}
+                      removeBtn={isOwner}
+                      onRemove={() => onRemoveFromWatchedList(watchlistItem.movie.id)}
                     />
                   )
                 })}
@@ -219,16 +261,24 @@ export default function Home({
           <div className="md:pl-8 md:flex-1 mt-8 hidden md:block">
             <h2 className="text-zinc-900 text-lg font-semibold mb-4">Watched</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              {combinedWatched.map((watchlistItem) => {
+              {combinedWatchedList.map((watchlistItem) => {
+                const isOwner = watchlistItem.userId === user?.id
+                const hasRatedMovie = watchlistItem.movie.ratedBy
+                  ? watchlistItem.movie.ratedBy.find((rating) => rating.name === user?.name)
+                  : false
+
                 return (
                   <MovieCard
                     {...watchlistItem.movie}
                     key={watchlistItem.movie.id}
                     lastWatched={watchlistItem.daysSinceWatched}
-                    selectBtn={watchlistItem.userId === user?.id}
-                    onClick={() => {
+                    selectBtn
+                    rateBtn={!hasRatedMovie}
+                    onRate={() => {
                       setMovieToRateId(watchlistItem.movie.id)
                     }}
+                    removeBtn={isOwner}
+                    onRemove={() => onRemoveFromWatchedList(watchlistItem.movie.id)}
                   />
                 )
               })}

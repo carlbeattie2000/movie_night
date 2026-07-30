@@ -36,4 +36,17 @@ export default class ApiController {
 
     return response.noContent()
   }
+
+  async destroyWatched({ request, auth, response }: HttpContext) {
+    const user = auth.getUserOrFail()
+    const movieId = request.input('movie_id')
+
+    const updated = this.watchlistService.removeWatchedMovie(user.id, movieId)
+
+    if (!updated) {
+      return response.badRequest()
+    }
+
+    return response.noContent()
+  }
 }

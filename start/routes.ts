@@ -29,6 +29,7 @@ router
         router.post('add', [controllers.watchlist.Api, 'store'])
         router.delete('remove', [controllers.watchlist.Api, 'destroy'])
         router.post('watched', [controllers.watchlist.Api, 'watched'])
+        router.delete('watched/remove', [controllers.watchlist.Api, 'destroyWatched'])
       })
       .prefix('api/watchlist')
       .as('watchlist')
