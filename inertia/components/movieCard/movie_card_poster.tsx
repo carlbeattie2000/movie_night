@@ -24,9 +24,9 @@ export default function MovieCardPoster({ url, title, ratedByUsers }: PosterProp
       }}
     >
       {showRatedBy && (
-        <div className={`${ratedByToggled ? 'opacity-100' : 'opacity-0'} transition-opacity`}>
-          <div className="absolute w-full h-full bg-[rgba(0,0,0,.95)] z-30"></div>
-          <div className="absolute w-full h-full bottom-0 p-2 flex flex-col gap-2 z-30">
+        <div className={`absolute w-full h-full ${ratedByToggled ? 'opacity-100' : 'opacity-0'} transition-opacity z-30`}>
+          <div className="absolute w-full h-full bg-[rgba(0,0,0,.95)]"></div>
+          <div className="absolute w-full h-full bottom-0 p-2 flex flex-col gap-2">
             <RatedBy
               show={ratedByUsers !== undefined && ratedByUsers.length > 0}
               ratedByUsers={ratedByUsers}

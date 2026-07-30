@@ -47,6 +47,7 @@ export default function MovieCard({
           releaseDate={releaseDate}
           voteAverage={voteAverage}
           lastWatched={lastWatched}
+          ratedByUsers={ratedBy}
         />
 
         <MovieCardActions
