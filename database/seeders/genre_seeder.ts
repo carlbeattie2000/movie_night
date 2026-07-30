@@ -10,11 +10,13 @@ export default class extends BaseSeeder {
       throw new Error(genresResult.message)
     }
 
-    genresResult.result.genres.forEach(async (genre) => {
+    const genres = genresResult.result.genres
+
+    for (const genre of genres) {
       await Genre.create({
         tmdbId: genre.id,
         name: genre.name,
       })
-    })
+    }
   }
 }

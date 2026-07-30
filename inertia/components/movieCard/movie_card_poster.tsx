@@ -16,7 +16,7 @@ export default function MovieCardPoster({ url, title, ratedByUsers }: PosterProp
   return (
     <div className="aspect-2/3 overflow-hidden relative">
       {showRatedBy && (
-        <div className="bg-black/95 absolute w-full h-fit bottom-0 p-2 flex flex-col gap-2">
+        <div className="bg-[rgba(0, 0, 0, 0.8)] absolute w-full h-fit bottom-0 p-2 flex flex-col gap-2">
           <RatedBy
             show={ratedByUsers !== undefined && ratedByUsers.length > 0}
             ratedByUsers={ratedByUsers}
