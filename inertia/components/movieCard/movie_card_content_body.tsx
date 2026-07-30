@@ -18,12 +18,32 @@ export default function MovieCardContentBody({
   ratedByUsers,
 }: MovieCardContentBodyProps) {
   let avgRating = null
+  let isEqual = false
 
   if (ratedByUsers && ratedByUsers.length > 0) {
     avgRating =
       ratedByUsers.reduce((acc, current) => {
         return acc + (current.rating ?? 0)
       }, 0) / ratedByUsers.length
+
+    if (ratedByUsers.length > 1) {
+      let firstRatingInGroup: number | null = null
+
+      isEqual = ratedByUsers.every((userRatingRecord) => {
+        if (userRatingRecord.rating) {
+          if (firstRatingInGroup === null) {
+            firstRatingInGroup = userRatingRecord.rating
+            return true
+          }
+
+          if (firstRatingInGroup === userRatingRecord.rating) {
+            return true
+          }
+        }
+
+        return false
+      })
+    }
   }
 
   return (
@@ -38,7 +58,9 @@ export default function MovieCardContentBody({
       )}
       {avgRating && (
         <div className="absolute top-2 bg-[rgba(0,0,0,.8)] border border-zinc-600 text-xs p-2 w-10 h-10 rounded-full flex justify-center items-center">
-          <p className="text-yellow-300 text-xs font-bold">{avgRating}</p>
+          <p className={`${isEqual ? 'text-green-300' : 'text-yellow-300'} text-xs font-bold`}>
+            {avgRating}
+          </p>
         </div>
       )}
     </>
