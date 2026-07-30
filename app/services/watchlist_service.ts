@@ -3,7 +3,7 @@ import Movie from '#models/movie'
 import MovieGenre from '#models/movie_genre'
 import WatchlistItem from '#models/watchlist_item'
 import { DateTime } from 'luxon'
-import { tmdb } from '../utils/tmdb.ts'
+import { TMDB } from '../utils/tmdb.ts'
 import db from '@adonisjs/lucid/services/db'
 import MoviePickedResult from '#models/movie_picked_result'
 
@@ -28,27 +28,33 @@ export class WatchlistService {
     return { status: 'success', message: 'Movie added' }
   }
 
-  async #addFromTMDB(tmdbMovieId: number, userId: number): Promise<AddMovieResult> {
-    const tmdbMovieResult = await tmdb.movie(tmdbMovieId)
+  async #addFromTMDB(
+    tmdbMovieId: number,
+    mediaType: 'movie' | 'tv',
+    userId: number
+  ): Promise<AddMovieResult> {
+    const tmdbMovieResult = await TMDB.query().findById(tmdbMovieId, mediaType)
 
-    if (tmdbMovieResult.status === 'error') {
+    if (!tmdbMovieResult) {
       return { status: 'error', message: 'Failed to fetch movie from TMDB' }
     }
 
-    const tmdbMovie = tmdbMovieResult.result
+    let title =
+      tmdbMovieResult.media_type === 'movie' ? tmdbMovieResult.title : tmdbMovieResult.name
 
     await db.transaction(async (trx) => {
       const movie = await Movie.create(
         {
-          tmdbId: tmdbMovie.id,
-          title: tmdbMovie.title,
-          posterUrl: `https://image.tmdb.org/t/p/w500${tmdbMovie.poster_path}`,
-          voteAverage: tmdbMovie.vote_average,
+          tmdbId: tmdbMovieResult.id,
+          title,
+          posterUrl: `https://image.tmdb.org/t/p/w500${tmdbMovieResult.poster_path}`,
+          voteAverage: tmdbMovieResult.vote_average,
+          mediaType: tmdbMovieResult.media_type,
         },
         { client: trx }
       )
 
-      const genreIdMap = tmdbMovie.genres.map((g) => g.id)
+      const genreIdMap = tmdbMovieResult.genres.map((g) => g.id)
       const genres = await Genre.query({ client: trx }).whereIn('tmdbId', genreIdMap)
 
       await MovieGenre.createMany(
@@ -62,14 +68,21 @@ export class WatchlistService {
     return { status: 'success', message: 'Movie added' }
   }
 
-  async addMovie(tmdbMovieId: number, userId: number): Promise<AddMovieResult> {
-    const localMovieResult = await Movie.query().where('tmdbId', tmdbMovieId).first()
+  async addMovie(
+    tmdbMovieId: number,
+    mediaType: 'movie' | 'tv',
+    userId: number
+  ): Promise<AddMovieResult> {
+    const localMovieResult = await Movie.query()
+      .where('tmdbId', tmdbMovieId)
+      .andWhere('mediaType', mediaType)
+      .first()
 
     if (localMovieResult) {
       return this.#addFromLocalMovie(localMovieResult, userId)
     }
 
-    return this.#addFromTMDB(tmdbMovieId, userId)
+    return this.#addFromTMDB(tmdbMovieId, mediaType, userId)
   }
 
   async removeMovie(userId: number, movieId: number) {

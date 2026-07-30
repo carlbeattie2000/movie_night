@@ -1,4 +1,4 @@
-export interface MovieResult {
+interface BaseMovieResult {
   adult: boolean
   backdrop_path: string
   genre_ids: number[]
@@ -11,9 +11,36 @@ export interface MovieResult {
   vote_average: number
 }
 
+type BaseShowResult = Omit<BaseMovieResult, 'release_date' | 'title'> & {
+  name: string
+  first_air_date: string
+}
+
+export type MovieResult =
+  | (BaseMovieResult & { media_type: 'movie' })
+  | (BaseShowResult & { media_type: 'tv' })
+
 export interface MovieSearchResult {
   page: number
   results: MovieResult[]
+  total_pages: number
+  total_results: number
+}
+
+export interface NormalizedSearchResult {
+  id: number
+  title: string
+  genre_ids: number[]
+  popularity: number
+  poster_path: string
+  release_date: string
+  vote_average: number
+  media_type: string
+}
+
+export interface NormalizedMovieGenreSearchResult {
+  page: number
+  results: NormalizedSearchResult[]
   total_pages: number
   total_results: number
 }
@@ -47,6 +74,20 @@ export interface SingleMovieResult {
   vote_average: number
   vote_count: number
 }
+
+export interface SingleTvResult {
+  id: number
+  name: string
+  vote_average: number
+  first_air_date: string
+  popularity: number
+  poster_path: string
+  genres: { id: number; name: string }[]
+}
+
+export type MovieOrShownFound =
+  | (SingleMovieResult & { media_type: 'movie' })
+  | (SingleTvResult & { media_type: 'tv' })
 
 export interface GenresResult {
   genres: {

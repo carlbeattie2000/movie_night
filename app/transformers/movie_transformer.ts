@@ -6,7 +6,7 @@ import UserTransformer from './user_transformer.ts'
 export default class MovieTransformer extends BaseTransformer<Movie> {
   toObject() {
     return {
-      ...this.pick(this.resource, ['id', 'watchlistedBy', 'posterUrl', 'title']),
+      ...this.pick(this.resource, ['id', 'watchlistedBy', 'posterUrl', 'title', 'mediaType']),
       genres: GenreTransformer.transform(this.whenLoaded(this.resource.genres)),
       watchlistedBy: UserTransformer.transform(this.whenLoaded(this.resource.watchlistedBy)),
       ratedBy: UserTransformer.transform(this.whenLoaded(this.resource.ratedBy)),

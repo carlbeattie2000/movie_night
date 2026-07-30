@@ -16,10 +16,9 @@ export default class MoviesController {
     const query = request.input('title')
 
     const searchResults = await this.movieService.searchForMovie(query)
-    const { results } = searchResults
 
     return inertia.render('search/index', {
-      result: MovieResultTransformer.transform(results),
+      result: MovieResultTransformer.transform(searchResults),
     })
   }
 

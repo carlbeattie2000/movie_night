@@ -21,6 +21,7 @@ type MovieCardProps = {
 export default function MovieCard({
   id,
   title,
+  mediaType,
   releaseDate,
   voteAverage,
   lastWatched,
@@ -37,7 +38,7 @@ export default function MovieCard({
   const [addStatus, setAddStatus] = useState<string>('Add')
   const [addVariant, setAddVariant] = useState<'normal' | 'success' | 'danger'>('normal')
 
-  const onAddMovie = async (movieId: number) => {
+  const onAddMovie = async (movieId: number, mediaType: string) => {
     try {
       const res = await fetch('/api/watchlist/add', {
         method: 'POST',
@@ -46,6 +47,7 @@ export default function MovieCard({
         },
         body: JSON.stringify({
           movie_id: movieId,
+          media_type: mediaType,
         }),
       })
 
@@ -103,8 +105,8 @@ export default function MovieCard({
             )
           })}
 
-        {addBtn && id && (
-          <Button text={addStatus} variant={addVariant} onClick={() => onAddMovie(id)} />
+        {addBtn && id && mediaType && (
+          <Button text={addStatus} variant={addVariant} onClick={() => onAddMovie(id, mediaType)} />
         )}
 
         {selectBtn && id && (

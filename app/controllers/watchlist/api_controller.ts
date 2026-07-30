@@ -9,8 +9,9 @@ export default class ApiController {
   async store({ request, auth, response }: HttpContext) {
     const user = auth.getUserOrFail()
     const id = request.input('movie_id')
+    const mediaType = request.input('media_type')
 
-    const result = await this.watchlistService.addMovie(id, user.id)
+    const result = await this.watchlistService.addMovie(id, mediaType, user.id)
 
     if (result.status === 'error') {
       return response.badRequest(result)

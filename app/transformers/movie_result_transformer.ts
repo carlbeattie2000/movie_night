@@ -1,7 +1,7 @@
 import { BaseTransformer } from '@adonisjs/core/transformers'
-import type { MovieResult } from '../contracts/tmdb.js'
+import type { NormalizedSearchResult } from '../contracts/tmdb.js'
 
-export default class MovieResultTransformer extends BaseTransformer<MovieResult> {
+export default class MovieResultTransformer extends BaseTransformer<NormalizedSearchResult> {
   toObject() {
     return this.pick(this.resource, [
       'id',
@@ -10,6 +10,7 @@ export default class MovieResultTransformer extends BaseTransformer<MovieResult>
       'poster_path',
       'popularity',
       'vote_average',
+      'media_type',
     ])
   }
 }

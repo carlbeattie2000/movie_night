@@ -19,6 +19,7 @@ export default function Index({ result }: PageProps) {
               releaseDate={movie.release_date}
               posterUrl={movie.poster_path}
               voteAverage={movie.vote_average}
+              mediaType={movie.media_type}
               addBtn
             />
           )

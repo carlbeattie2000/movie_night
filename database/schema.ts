@@ -43,12 +43,14 @@ export class MoviePickedResultSchema extends BaseModel {
 }
 
 export class MovieSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'posterUrl', 'title', 'tmdbId', 'voteAverage'] as const
+  static $columns = ['createdAt', 'id', 'mediaType', 'posterUrl', 'title', 'tmdbId', 'voteAverage'] as const
   $columns = MovieSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column({ isPrimary: true })
   declare id: number
+  @column()
+  declare mediaType: string
   @column()
   declare posterUrl: string
   @column()

@@ -24,6 +24,7 @@ export default function Index({ result, totalPages, currentPage, genreId }: Page
 
       <div className="grid grid-cols-2 gap-x-2 gap-y-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-10 w-full p-6">
         {result.map((movie) => {
+          console.log(movie);
           return (
             <MovieCard
               id={movie.id}
@@ -32,6 +33,7 @@ export default function Index({ result, totalPages, currentPage, genreId }: Page
               posterUrl={movie.poster_path}
               releaseDate={movie.release_date}
               voteAverage={movie.vote_average}
+              mediaType={movie.media_type}
               addBtn
             />
           )

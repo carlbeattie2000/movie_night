@@ -1,34 +1,47 @@
 import { DateTime } from 'luxon'
-import { type MovieResult, type MovieSearchResult } from '../contracts/tmdb.ts'
-import { tmdb } from '../utils/tmdb.ts'
+import {
+  type NormalizedSearchResult,
+  type NormalizedMovieGenreSearchResult,
+} from '../contracts/tmdb.ts'
+import { TMDB } from '../utils/tmdb.ts'
 import { FlashException } from '../errors/flash_exception.ts'
 
 export class MovieService {
-  #formatMovieResults(movieResults: MovieResult[]): MovieResult[] {
-    return movieResults.map((result) => ({
-      ...result,
-      poster_path: `https://image.tmdb.org/t/p/w500${result.poster_path}`,
-      release_date: DateTime.fromISO(result.release_date).toFormat('d LLLL yyyy'),
-    }))
+  #formatMovieResults(movieResults: NormalizedSearchResult[]): NormalizedSearchResult[] {
+    const filteredMovieResults = movieResults.filter((result) => {
+      if (result.media_type) {
+        return result.media_type === 'movie' || result.media_type === 'tv'
+      }
+
+      return true
+    })
+
+    return filteredMovieResults.map((result) => {
+      return {
+        ...result,
+        poster_path: `https://image.tmdb.org/t/p/w500${result.poster_path}`,
+        release_date: DateTime.fromISO(result.release_date).toFormat('d LLLL yyyy'),
+      }
+    })
   }
 
-  async searchForMovie(title: string): Promise<MovieSearchResult> {
-    const searchResult = await tmdb.search(title)
-    if (searchResult.status === 'error') {
+  async searchForMovie(title: string): Promise<NormalizedSearchResult[]> {
+    const searchResults = await TMDB.query().byTitle(title)
+
+    if (!searchResults) {
       throw new FlashException('Failed to fetch movie from TMDB', 'movies.show_search')
     }
 
-    const { result } = searchResult
-    return { ...result, results: this.#formatMovieResults(result.results) }
+    return this.#formatMovieResults(searchResults)
   }
 
-  async browseByCategory(genreId: number, page: number): Promise<MovieSearchResult> {
-    const moviesResult = await tmdb.movies(genreId, page ?? 1)
-    if (moviesResult.status === 'error') {
+  async browseByCategory(genreId: number, page: number): Promise<NormalizedMovieGenreSearchResult> {
+    const moviesResult = await TMDB.query().moviesByGenre(genreId, page ?? 1)
+
+    if (!moviesResult) {
       throw new FlashException('Failed to fetch movie from TMDB', 'home.show')
     }
 
-    const { result } = moviesResult
-    return { ...result, results: this.#formatMovieResults(result.results) }
+    return { ...moviesResult, results: this.#formatMovieResults(moviesResult.results) }
   }
 }
