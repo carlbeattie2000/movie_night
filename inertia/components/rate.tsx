@@ -4,9 +4,10 @@ interface RateProps {
   maxStars: number
   rated?: number
   onRatingSet?: (rating: number) => void
+  strokeColor?: string
 }
 
-export default function Rate({ maxStars, rated, onRatingSet }: RateProps) {
+export default function Rate({ maxStars, rated, onRatingSet, strokeColor }: RateProps) {
   const [selected, setSelected] = useState<number[]>(new Array(maxStars).fill(0))
 
   useEffect(() => {
@@ -43,8 +44,8 @@ export default function Rate({ maxStars, rated, onRatingSet }: RateProps) {
           >
             <polygon
               points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9"
-              fill={v ? '#f5a623' : 'transparent'}
-              stroke="#f5a623"
+              fill={v ? (strokeColor ?? '#f5a623') : 'transparent'}
+              stroke={strokeColor ?? '#f5a623'}
               stroke-width="1"
               stroke-linejoin="round"
             />

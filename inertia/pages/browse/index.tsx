@@ -1,5 +1,5 @@
 import { Data } from '@generated/data'
-import MovieCard from '~/components/movie_card'
+import MovieCard from '~/components/movieCard/movie_card'
 import Pagination from '~/components/pagination'
 import { InertiaProps } from '~/types'
 
