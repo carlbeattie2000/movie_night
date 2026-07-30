@@ -168,6 +168,25 @@ export default function Home({
               />
             )}
 
+            {moviesToShow === MoviesToShow.WATCHED && (
+              <div className="flex gap-4">
+                <p className="text-sm text-zinc-800 font-bold">
+                  {other.name}:{' '}
+                  {
+                    combinedWatchedList.filter((watchlistItem) => watchlistItem.userId !== user?.id)
+                      .length
+                  }
+                </p>
+                <p className="text-sm text-zinc-800 font-bold">
+                  {user?.name}:{' '}
+                  {
+                    combinedWatchedList.filter((watchlistItem) => watchlistItem.userId === user?.id)
+                      .length
+                  }
+                </p>
+              </div>
+            )}
+
             <div className="grid grid-cols-2 gap-4">
               {moviesToShow === MoviesToShow.OWN &&
                 usersUnwatched.map((movie) => {
